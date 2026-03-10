@@ -465,21 +465,27 @@ function getConflictIds(tasks){
 }
 
 // ═══ STORAGE ADAPTER ═══
-// Works inside Claude (window.storage) and on any external host (localStorage)
+// Syncs via Cloudflare Worker KV — works on any device
+const WORKER_URL = 'https://purple-bush-fd43.paulo-mreis7590.workers.dev';
+const USER_ID = 'paulo';
+
 const store = {
   async get(key){
-    if(window.storage){
-      try{ const r=await window.storage.get(key); return r?r.value:null; }catch(e){return null;}
-    } else {
-      return localStorage.getItem(key);
-    }
+    try{
+      const r = await fetch(`${WORKER_URL}?key=${encodeURIComponent(key)}&user=${USER_ID}`);
+      const json = await r.json();
+      return json.value || null;
+    } catch(e){ return localStorage.getItem(key); }
   },
-  async set(key,value){
-    if(window.storage){
-      try{ await window.storage.set(key,value); }catch(e){}
-    } else {
-      try{ localStorage.setItem(key,value); }catch(e){}
-    }
+  async set(key, value){
+    try{
+      await fetch(`${WORKER_URL}?key=${encodeURIComponent(key)}&user=${USER_ID}`, {
+        method: 'PUT',
+        body: value
+      });
+    } catch(e){}
+    // Always keep localStorage as offline fallback
+    try{ localStorage.setItem(key, value); } catch(e){}
   }
 };
 
