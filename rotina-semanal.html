@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Rotina Semanal</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg:       #0c0c10;
+    --surface:  #13131a;
+    --surface2: #1a1a24;
+    --border:   #22222e;
+    --border2:  #2e2e3e;
+    --text:     #ddd8cc;
+    --muted:    #4a4a62;
+    --muted2:   #6a6a86;
+    --accent:   #e8c547;
+    --accent2:  #a8e05a;
+    --danger:   #e05a5a;
+    --mono:     'IBM Plex Mono', monospace;
+    --sans:     'IBM Plex Sans', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+
+  /* ── LAYOUT ─────────────────────────────────── */
+  .app {
+    display: grid;
+    grid-template-rows: 56px 1fr;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* ── TOPBAR ──────────────────────────────────── */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    position: relative;
+    z-index: 10;
+  }
+
+  .topbar-brand {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+
+  .topbar-brand span {
+    color: var(--muted);
+    font-weight: 400;
+  }
+
+  .nav-tabs {
+    display: flex;
+    gap: 2px;
+    background: var(--bg);
+    padding: 4px;
+    border-radius: 8px;
+  }
+
+  .nav-tab {
+    padding: 6px 16px;
+    border: none;
+    background: transparent;
+    color: var(--muted2);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all .2s;
+  }
+
+  .nav-tab.active {
+    background: var(--surface2);
+    color: var(--accent);
+  }
+
+  .week-badge {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+
+  /* ── VIEWS ───────────────────────────────────── */
+  .view {
+    display: none;
+    height: 100%;
+    overflow: hidden;
+  }
+  .view.active { display: flex; flex-direction: column; }
+
+  /* ── TRACKER VIEW ────────────────────────────── */
+  .tracker-layout {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  /* Sidebar days */
+  .days-sidebar {
+    border-right: 1px solid var(--border);
+    padding: 16px 0;
+    overflow-y: auto;
+    background: var(--surface);
+  }
+
+  .days-sidebar-title {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: var(--muted);
+    padding: 0 16px 12px;
+    text-transform: uppercase;
+  }
+
+  .day-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 12px 16px;
+    border: none;
+    background: transparent;
+    color: var(--muted2);
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 400;
+    cursor: pointer;
+    border-left: 3px solid transparent;
+    transition: all .15s;
+    text-align: left;
+  }
+
+  .day-btn:hover { background: var(--surface2); color: var(--text); }
+
+  .day-btn.active {
+    border-left-color: var(--accent);
+    background: var(--surface2);
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .day-btn.today .day-label::after {
+    content: '●';
+    font-size: 7px;
+    color: var(--accent2);
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+
+  .day-progress-mini {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  .day-progress-mini.complete { color: var(--accent2); }
+
+  /* Main task area */
+  .tasks-main {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .tasks-header {
+    padding: 24px 28px 16px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  .tasks-header-top {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+
+  .tasks-day-title {
+    font-family: var(--mono);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .tasks-count {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+
+  .progress-bar-wrap {
+    height: 3px;
+    background: var(--border2);
+    border-radius: 2px;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 2px;
+    transition: width .4s ease;
+  }
+
+  .progress-bar-fill.complete { background: var(--accent2); }
+
+  .tasks-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .task-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 18px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    cursor: pointer;
+    transition: all .15s;
+    user-select: none;
+  }
+
+  .task-card:hover { border-color: var(--border2); background: var(--surface2); }
+
+  .task-card.checked {
+    border-color: #1e2e10;
+    background: #111a0a;
+    opacity: .65;
+  }
+
+  .checkbox {
+    width: 20px; height: 20px;
+    border-radius: 5px;
+    border: 2px solid var(--border2);
+    background: transparent;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: all .15s;
+  }
+
+  .task-card.checked .checkbox {
+    background: var(--accent2);
+    border-color: var(--accent2);
+  }
+
+  .checkbox svg { display: none; }
+  .task-card.checked .checkbox svg { display: block; }
+
+  .task-icon { font-size: 20px; flex-shrink: 0; }
+
+  .task-info { flex: 1; }
+
+  .task-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    transition: all .15s;
+  }
+
+  .task-card.checked .task-label {
+    text-decoration: line-through;
+    color: var(--muted);
+  }
+
+  .task-time {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+    letter-spacing: .5px;
+  }
+
+  /* Week summary bar */
+  .week-summary {
+    padding: 14px 28px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: var(--surface);
+    flex-shrink: 0;
+  }
+
+  .week-summary-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .week-bar-wrap {
+    flex: 1;
+    height: 6px;
+    background: var(--border2);
+    border-radius: 3px;
+  }
+
+  .week-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 3px;
+    transition: width .5s ease;
+  }
+
+  .week-pct {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+    min-width: 40px;
+    text-align: right;
+  }
+
+  /* ── CMS VIEW ────────────────────────────────── */
+  .cms-layout {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .cms-sidebar {
+    border-right: 1px solid var(--border);
+    padding: 16px 0;
+    overflow-y: auto;
+    background: var(--surface);
+  }
+
+  .cms-sidebar-title {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: var(--muted);
+    padding: 0 16px 12px;
+    text-transform: uppercase;
+  }
+
+  .cms-day-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 12px 16px;
+    border: none;
+    background: transparent;
+    color: var(--muted2);
+    font-family: var(--sans);
+    font-size: 13px;
+    cursor: pointer;
+    border-left: 3px solid transparent;
+    transition: all .15s;
+    text-align: left;
+  }
+
+  .cms-day-btn:hover { background: var(--surface2); color: var(--text); }
+
+  .cms-day-btn.active {
+    border-left-color: var(--accent);
+    background: var(--surface2);
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .cms-task-count {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    background: var(--border2);
+    padding: 1px 6px;
+    border-radius: 10px;
+  }
+
+  .cms-main {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .cms-header {
+    padding: 24px 28px 20px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .cms-title {
+    font-family: var(--mono);
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--border2);
+    background: transparent;
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all .15s;
+    text-transform: uppercase;
+  }
+
+  .btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  .btn-primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #0c0c10;
+    font-weight: 700;
+  }
+
+  .btn-primary:hover { background: #f5d55a; border-color: #f5d55a; color: #0c0c10; }
+
+  .btn-danger { color: var(--danger); border-color: var(--danger); }
+  .btn-danger:hover { background: var(--danger); color: #fff; }
+
+  .btn-sm { padding: 5px 10px; font-size: 10px; }
+
+  .cms-tasks {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .cms-task-row {
+    display: grid;
+    grid-template-columns: 50px 1fr 1fr auto;
+    gap: 10px;
+    align-items: center;
+    padding: 14px 16px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    transition: border-color .15s;
+  }
+
+  .cms-task-row:hover { border-color: var(--border2); }
+
+  .input-field {
+    padding: 8px 12px;
+    border-radius: 7px;
+    border: 1px solid var(--border2);
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 13px;
+    outline: none;
+    transition: border-color .15s;
+    width: 100%;
+  }
+
+  .input-field:focus { border-color: var(--accent); }
+
+  .input-icon {
+    text-align: center;
+    font-size: 18px;
+  }
+
+  .cms-footer {
+    padding: 16px 28px;
+    border-top: 1px solid var(--border);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  /* Add task form */
+  .add-task-form {
+    display: grid;
+    grid-template-columns: 50px 1fr 1fr auto;
+    gap: 10px;
+    align-items: center;
+    padding: 14px 16px;
+    border-radius: 10px;
+    border: 1px dashed var(--border2);
+    background: var(--surface);
+    margin-top: 4px;
+  }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--accent);
+    color: #0c0c10;
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 10px 18px;
+    border-radius: 8px;
+    z-index: 999;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: all .25s ease;
+    pointer-events: none;
+  }
+
+  .toast.show { opacity: 1; transform: translateY(0); }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+  /* Empty state */
+  .empty-state {
+    text-align: center;
+    padding: 40px;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 2px;
+  }
+
+  /* Loading */
+  .loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="topbar-brand">ROTINA<span>/</span>SEMANAL</div>
+    <div class="nav-tabs">
+      <button class="nav-tab active" onclick="switchView('tracker')">Tracker</button>
+      <button class="nav-tab" onclick="switchView('cms')">Editor</button>
+    </div>
+    <div class="week-badge" id="weekBadge">—</div>
+  </header>
+
+  <!-- TRACKER VIEW -->
+  <div class="view active" id="view-tracker">
+    <div class="tracker-layout">
+      <aside class="days-sidebar">
+        <div class="days-sidebar-title">Dias</div>
+        <div id="daysList"></div>
+      </aside>
+      <div class="tasks-main">
+        <div class="tasks-header">
+          <div class="tasks-header-top">
+            <div class="tasks-day-title" id="tasksDayTitle">—</div>
+            <div class="tasks-count" id="tasksCount">0/0</div>
+          </div>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar-fill" id="dayProgressBar" style="width:0%"></div>
+          </div>
+        </div>
+        <div class="tasks-list" id="tasksList"><div class="loading">CARREGANDO...</div></div>
+        <div class="week-summary">
+          <div class="week-summary-label">Semana</div>
+          <div class="week-bar-wrap">
+            <div class="week-bar-fill" id="weekBarFill" style="width:0%"></div>
+          </div>
+          <div class="week-pct" id="weekPct">0%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CMS VIEW -->
+  <div class="view" id="view-cms">
+    <div class="cms-layout">
+      <aside class="cms-sidebar">
+        <div class="cms-sidebar-title">Dias da Semana</div>
+        <div id="cmsDaysList"></div>
+      </aside>
+      <div class="cms-main">
+        <div class="cms-header">
+          <div class="cms-title" id="cmsDayTitle">—</div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-sm" onclick="showAddForm()">+ Tarefa</button>
+          </div>
+        </div>
+        <div class="cms-tasks" id="cmsTasksList"><div class="loading">CARREGANDO...</div></div>
+        <div class="cms-footer">
+          <button class="btn btn-primary" onclick="saveChanges()">💾 Salvar Alterações</button>
+          <button class="btn btn-sm btn-danger" onclick="resetWeekChecks()">Limpar Checks da Semana</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ────────────────────────────────────────────
+// DATA
+// ────────────────────────────────────────────
+const DAYS = ['Segunda','Terça','Quarta','Quinta','Sexta','Sábado','Domingo'];
+
+const DEFAULT_ROUTINE = {
+  Segunda: [
+    {id:'seg1', icon:'💼', label:'Trabalho', time:'8h30–18h'},
+    {id:'seg2', icon:'🎓', label:'Pós-graduação', time:'Noite — 90 min'},
+    {id:'seg3', icon:'📖', label:'Leitura', time:'Antes de dormir'},
+  ],
+  Terça: [
+    {id:'ter1', icon:'🏋️', label:'Academia', time:'~7h'},
+    {id:'ter2', icon:'💼', label:'Trabalho', time:'8h30–18h'},
+    {id:'ter3', icon:'🎵', label:'Gaita', time:'Noite — 20–30 min'},
+    {id:'ter4', icon:'📖', label:'Leitura', time:'Antes de dormir'},
+  ],
+  Quarta: [
+    {id:'qua1', icon:'🏋️', label:'Academia', time:'~7h'},
+    {id:'qua2', icon:'💼', label:'Trabalho', time:'8h30–18h'},
+    {id:'qua3', icon:'🎓', label:'Pós-graduação', time:'Noite — 60 min'},
+    {id:'qua4', icon:'📖', label:'Leitura', time:'Antes de dormir'},
+  ],
+  Quinta: [
+    {id:'qui1', icon:'💼', label:'Trabalho', time:'8h30–18h'},
+    {id:'qui2', icon:'🧠', label:'Psicóloga', time:'19h–20h'},
+    {id:'qui3', icon:'📖', label:'Leitura', time:'Antes de dormir'},
+  ],
+  Sexta: [
+    {id:'sex1', icon:'🏋️', label:'Academia', time:'~7h'},
+    {id:'sex2', icon:'💼', label:'Trabalho', time:'8h30–18h'},
+    {id:'sex3', icon:'🎵', label:'Gaita ou descanso', time:'Noite — livre'},
+    {id:'sex4', icon:'📖', label:'Leitura', time:'Antes de dormir'},
+  ],
+  Sábado: [
+    {id:'sab1', icon:'🧹', label:'Faxina', time:'Manhã'},
+    {id:'sab2', icon:'👕', label:'Lavar roupa', time:'Manhã'},
+    {id:'sab3', icon:'🎵', label:'Gaita (sessão longa)', time:'Tarde/Noite'},
+    {id:'sab4', icon:'📖', label:'Leitura', time:'Antes de dormir'},
+  ],
+  Domingo: [
+    {id:'dom1', icon:'🍱', label:'Marmita da semana', time:'Manhã'},
+    {id:'dom2', icon:'🎓', label:'Revisão pós (opcional)', time:'Noite'},
+    {id:'dom3', icon:'📖', label:'Leitura', time:'Antes de dormir'},
+  ],
+};
+
+// ────────────────────────────────────────────
+// STATE
+// ────────────────────────────────────────────
+let routine = {};
+let checks  = {};
+let activeTrackerDay = null;
+let activeCmsDay     = null;
+let pendingEdits     = {};  // { day: [...tasks] }
+
+// ────────────────────────────────────────────
+// STORAGE KEYS
+// ────────────────────────────────────────────
+function getWeekKey() {
+  const now  = new Date();
+  const day  = now.getDay();
+  const mon  = new Date(now);
+  mon.setDate(now.getDate() - ((day + 6) % 7));
+  return 'checks_' + mon.toISOString().slice(0,10);
+}
+
+function getWeekLabel() {
+  const now  = new Date();
+  const day  = now.getDay();
+  const mon  = new Date(now);
+  mon.setDate(now.getDate() - ((day + 6) % 7));
+  const sun  = new Date(mon);
+  sun.setDate(mon.getDate() + 6);
+  const fmt  = d => d.toLocaleDateString('pt-BR', {day:'2-digit',month:'2-digit'});
+  return fmt(mon) + ' – ' + fmt(sun);
+}
+
+function getTodayIndex() {
+  const d = new Date().getDay();
+  return d === 0 ? 6 : d - 1;
+}
+
+// ────────────────────────────────────────────
+// LOAD / SAVE
+// ────────────────────────────────────────────
+async function loadAll() {
+  try {
+    const rRes = await window.storage.get('routine_data');
+    routine = rRes ? JSON.parse(rRes.value) : JSON.parse(JSON.stringify(DEFAULT_ROUTINE));
+  } catch(e) {
+    routine = JSON.parse(JSON.stringify(DEFAULT_ROUTINE));
+  }
+
+  try {
+    const cRes = await window.storage.get(getWeekKey());
+    checks = cRes ? JSON.parse(cRes.value) : {};
+  } catch(e) {
+    checks = {};
+  }
+
+  pendingEdits = JSON.parse(JSON.stringify(routine));
+}
+
+async function saveRoutine() {
+  try {
+    await window.storage.set('routine_data', JSON.stringify(routine));
+  } catch(e) { console.error(e); }
+}
+
+async function saveChecks() {
+  try {
+    await window.storage.set(getWeekKey(), JSON.stringify(checks));
+  } catch(e) { console.error(e); }
+}
+
+// ────────────────────────────────────────────
+// TRACKER
+// ────────────────────────────────────────────
+function renderTracker(selectedDay) {
+  activeTrackerDay = selectedDay || DAYS[getTodayIndex()];
+  document.getElementById('weekBadge').textContent = getWeekLabel();
+
+  // Sidebar
+  const list = document.getElementById('daysList');
+  list.innerHTML = '';
+  DAYS.forEach((day, i) => {
+    const tasks = routine[day] || [];
+    const done  = tasks.filter(t => checks[t.id]).length;
+    const isToday = i === getTodayIndex();
+    const isActive = day === activeTrackerDay;
+    const allDone = tasks.length > 0 && done === tasks.length;
+
+    const btn = document.createElement('button');
+    btn.className = 'day-btn' + (isActive ? ' active' : '') + (isToday ? ' today' : '');
+    btn.innerHTML = `
+      <span class="day-label">${day}</span>
+      <span class="day-progress-mini ${allDone ? 'complete' : ''}">${done}/${tasks.length}</span>
+    `;
+    btn.onclick = () => renderTracker(day);
+    list.appendChild(btn);
+  });
+
+  // Tasks
+  renderDayTasks(activeTrackerDay);
+
+  // Week summary
+  updateWeekSummary();
+}
+
+function renderDayTasks(day) {
+  const tasks = routine[day] || [];
+  const done  = tasks.filter(t => checks[t.id]).length;
+  const pct   = tasks.length ? Math.round(done / tasks.length * 100) : 0;
+
+  document.getElementById('tasksDayTitle').textContent = day;
+  document.getElementById('tasksCount').textContent   = `${done}/${tasks.length} tarefas`;
+
+  const bar = document.getElementById('dayProgressBar');
+  bar.style.width = pct + '%';
+  bar.classList.toggle('complete', pct === 100);
+
+  const list = document.getElementById('tasksList');
+  if (!tasks.length) {
+    list.innerHTML = '<div class="empty-state">NENHUMA TAREFA</div>';
+    return;
+  }
+
+  list.innerHTML = '';
+  tasks.forEach(task => {
+    const isChecked = !!checks[task.id];
+    const card = document.createElement('div');
+    card.className = 'task-card' + (isChecked ? ' checked' : '');
+    card.innerHTML = `
+      <div class="checkbox">
+        <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+          <path d="M1.5 5.5l3 3 5-5" stroke="#0c0c10" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="task-icon">${task.icon}</div>
+      <div class="task-info">
+        <div class="task-label">${task.label}</div>
+        <div class="task-time">${task.time}</div>
+      </div>
+    `;
+    card.onclick = () => toggleCheck(task.id, day);
+    list.appendChild(card);
+  });
+}
+
+async function toggleCheck(id, day) {
+  checks[id] = !checks[id];
+  await saveChecks();
+  renderDayTasks(day);
+  updateWeekSummary();
+  // Refresh sidebar count
+  document.querySelectorAll('.day-progress-mini').forEach((el, i) => {
+    const d = DAYS[i];
+    const tasks = routine[d] || [];
+    const done  = tasks.filter(t => checks[t.id]).length;
+    el.textContent = `${done}/${tasks.length}`;
+    el.classList.toggle('complete', tasks.length > 0 && done === tasks.length);
+  });
+}
+
+function updateWeekSummary() {
+  const all  = Object.values(routine).flat();
+  const done = all.filter(t => checks[t.id]).length;
+  const pct  = all.length ? Math.round(done / all.length * 100) : 0;
+  document.getElementById('weekBarFill').style.width = pct + '%';
+  document.getElementById('weekPct').textContent = pct + '%';
+}
+
+// ────────────────────────────────────────────
+// CMS
+// ────────────────────────────────────────────
+function renderCms(selectedDay) {
+  activeCmsDay = selectedDay || DAYS[0];
+
+  const sidebar = document.getElementById('cmsDaysList');
+  sidebar.innerHTML = '';
+  DAYS.forEach(day => {
+    const count = (pendingEdits[day] || []).length;
+    const btn = document.createElement('button');
+    btn.className = 'cms-day-btn' + (day === activeCmsDay ? ' active' : '');
+    btn.innerHTML = `
+      <span>${day}</span>
+      <span class="cms-task-count">${count}</span>
+    `;
+    btn.onclick = () => renderCms(day);
+    sidebar.appendChild(btn);
+  });
+
+  document.getElementById('cmsDayTitle').textContent = activeCmsDay;
+  renderCmsTasks(activeCmsDay);
+}
+
+function renderCmsTasks(day) {
+  const tasks = pendingEdits[day] || [];
+  const list  = document.getElementById('cmsTasksList');
+  list.innerHTML = '';
+
+  tasks.forEach((task, idx) => {
+    const row = document.createElement('div');
+    row.className = 'cms-task-row';
+    row.innerHTML = `
+      <input class="input-field input-icon" type="text" value="${task.icon}" placeholder="🎯"
+        data-idx="${idx}" data-field="icon" onchange="updatePending(this)" />
+      <input class="input-field" type="text" value="${task.label}" placeholder="Nome da tarefa"
+        data-idx="${idx}" data-field="label" onchange="updatePending(this)" />
+      <input class="input-field" type="text" value="${task.time}" placeholder="Horário"
+        data-idx="${idx}" data-field="time" onchange="updatePending(this)" />
+      <button class="btn btn-sm btn-danger" onclick="removeTask(${idx})">✕</button>
+    `;
+    list.appendChild(row);
+  });
+}
+
+function updatePending(input) {
+  const idx   = parseInt(input.dataset.idx);
+  const field = input.dataset.field;
+  pendingEdits[activeCmsDay][idx][field] = input.value;
+}
+
+function removeTask(idx) {
+  if (!confirm('Remover esta tarefa?')) return;
+  pendingEdits[activeCmsDay].splice(idx, 1);
+  renderCms(activeCmsDay);
+}
+
+function showAddForm() {
+  const list = document.getElementById('cmsTasksList');
+  const existing = list.querySelector('.add-task-form');
+  if (existing) { existing.remove(); return; }
+
+  const form = document.createElement('div');
+  form.className = 'add-task-form';
+  form.innerHTML = `
+    <input class="input-field input-icon" id="newIcon" type="text" placeholder="🎯" style="text-align:center;" />
+    <input class="input-field" id="newLabel" type="text" placeholder="Nome da tarefa" />
+    <input class="input-field" id="newTime"  type="text" placeholder="Ex: Noite — 30 min" />
+    <button class="btn btn-primary btn-sm" onclick="addTask()">+ Add</button>
+  `;
+  list.appendChild(form);
+  document.getElementById('newLabel').focus();
+}
+
+function addTask() {
+  const icon  = document.getElementById('newIcon').value.trim()  || '📌';
+  const label = document.getElementById('newLabel').value.trim();
+  const time  = document.getElementById('newTime').value.trim()  || '—';
+
+  if (!label) { showToast('Digite o nome da tarefa'); return; }
+
+  const id = activeCmsDay.toLowerCase().slice(0,3) + '_' + Date.now();
+  if (!pendingEdits[activeCmsDay]) pendingEdits[activeCmsDay] = [];
+  pendingEdits[activeCmsDay].push({ id, icon, label, time });
+  renderCms(activeCmsDay);
+  showToast('Tarefa adicionada');
+}
+
+async function saveChanges() {
+  routine = JSON.parse(JSON.stringify(pendingEdits));
+  await saveRoutine();
+  renderCms(activeCmsDay);
+  showToast('Rotina salva com sucesso ✓');
+}
+
+async function resetWeekChecks() {
+  if (!confirm('Limpar todos os checks desta semana?')) return;
+  checks = {};
+  await saveChecks();
+  showToast('Checks da semana limpos');
+}
+
+// ────────────────────────────────────────────
+// VIEW SWITCH
+// ────────────────────────────────────────────
+function switchView(view) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('view-' + view).classList.add('active');
+  event.target.classList.add('active');
+
+  if (view === 'tracker') renderTracker(activeTrackerDay);
+  if (view === 'cms')     renderCms(activeCmsDay);
+}
+
+// ────────────────────────────────────────────
+// TOAST
+// ────────────────────────────────────────────
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ────────────────────────────────────────────
+// INIT
+// ────────────────────────────────────────────
+(async () => {
+  await loadAll();
+  renderTracker();
+})();
+</script>
+</body>
+</html>
