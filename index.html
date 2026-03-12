@@ -80,7 +80,42 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
 .task-card.checked .t-label{text-decoration:line-through;color:var(--muted);}
 .t-meta{display:flex;align-items:center;gap:8px;margin-top:2px;}
 .t-time{font-family:var(--mono);font-size:10px;color:var(--muted);}
-.t-conflict-badge{font-family:var(--mono);font-size:9px;padding:1px 6px;border-radius:10px;background:rgba(224,90,90,.12);color:var(--danger);letter-spacing:.5px;}
+.view-toggle-btn{width:30px;height:30px;border-radius:7px;border:1px solid var(--b2);background:transparent;color:var(--muted2);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:auto;transition:all .15s;}
+.view-toggle-btn:hover{border-color:var(--accent);color:var(--accent);}
+.view-toggle-btn.active{border-color:var(--accent);color:var(--accent);background:rgba(232,197,71,.08);}
+.view-toggle-btn svg{width:15px;height:15px;}
+
+/* ═══ KANBAN ═══ */
+.kanban-panel{flex:1;overflow-x:auto;overflow-y:hidden;display:flex;gap:10px;padding:12px 14px;scrollbar-width:thin;}
+.kanban-panel::-webkit-scrollbar{height:4px;}
+.kanban-panel::-webkit-scrollbar-thumb{background:var(--b2);border-radius:2px;}
+.kb-col{flex:0 0 200px;display:flex;flex-direction:column;gap:0;border-radius:10px;border:1px solid var(--b1);background:var(--s1);overflow:hidden;}
+.kb-col.kb-today{border-color:rgba(232,197,71,.35);}
+.kb-col-hdr{padding:10px 12px 8px;border-bottom:1px solid var(--b1);flex-shrink:0;}
+.kb-col-name{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text);}
+.kb-col.kb-today .kb-col-name{color:var(--accent);}
+.kb-col-meta{display:flex;align-items:center;gap:6px;margin-top:4px;}
+.kb-col-pct{font-family:var(--mono);font-size:9px;color:var(--muted);}
+.kb-prog{flex:1;height:3px;background:var(--b2);border-radius:2px;}
+.kb-prog-fill{height:100%;border-radius:2px;transition:width .4s;}
+.kb-tasks{flex:1;overflow-y:auto;padding:8px 8px;display:flex;flex-direction:column;gap:6px;scrollbar-width:none;}
+.kb-tasks::-webkit-scrollbar{display:none;}
+.kb-card{border-radius:8px;border:1px solid var(--b1);background:var(--bg);padding:9px 10px;cursor:pointer;transition:all .15s;user-select:none;}
+.kb-card:active{transform:scale(.97);}
+.kb-card.kb-done{opacity:.45;border-color:rgba(168,224,90,.2);background:#0a120a;}
+.kb-card.kb-conflict{border-color:rgba(224,90,90,.35);background:#130a0a;}
+.kb-card-top{display:flex;align-items:center;gap:7px;margin-bottom:5px;}
+.kb-chk{width:16px;height:16px;border-radius:4px;border:1.5px solid var(--b2);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.kb-card.kb-done .kb-chk{background:var(--green);border-color:var(--green);}
+.kb-icon{font-size:14px;flex-shrink:0;}
+.kb-label{font-size:12px;font-weight:500;color:var(--text);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.kb-card.kb-done .kb-label{text-decoration:line-through;color:var(--muted);}
+.kb-footer{display:flex;align-items:center;justify-content:space-between;gap:4px;}
+.kb-time{font-family:var(--mono);font-size:9px;color:var(--muted);}
+.kb-pts{font-family:var(--mono);font-size:9px;padding:1px 5px;border-radius:6px;background:rgba(232,197,71,.1);color:var(--accent);}
+.kb-card.kb-done .kb-pts{background:rgba(168,224,90,.1);color:var(--green);}
+.kb-conflict-tag{font-family:var(--mono);font-size:8px;color:var(--danger);}
+.kb-empty{font-family:var(--mono);font-size:9px;color:var(--muted);text-align:center;padding:16px 0;letter-spacing:1px;}{font-family:var(--mono);font-size:9px;padding:1px 6px;border-radius:10px;background:rgba(224,90,90,.12);color:var(--danger);letter-spacing:.5px;}
 .task-card.conflict{border-color:rgba(224,90,90,.35);background:#160e0e;}
 .task-card.conflict.checked{border-color:#1e2e10;background:#0f180a;}
 .ed-row.ed-conflict{border-color:rgba(224,90,90,.4);}
@@ -258,6 +293,11 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
           <span class="score-item-value" id="scorePrev" style="color:var(--muted2);">—</span>
           <span id="scorePrevSub" style="font-family:var(--mono);font-size:9px;color:var(--muted);margin-left:2px;"></span>
         </div>
+        <button class="view-toggle-btn" id="viewToggleBtn" onclick="toggleTrackerView()" title="Alternar visualização">
+          <svg id="vtIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+            <rect x="3" y="3" width="7" height="18" rx="1"/><rect x="14" y="3" width="7" height="11" rx="1"/><rect x="14" y="17" width="7" height="4" rx="1"/>
+          </svg>
+        </button>
       </div>
       <div class="tracker-body">
         <div class="day-strip" id="dayStrip"></div>
@@ -269,6 +309,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
             <span class="wb-pct" id="weekPct">0%</span>
           </div>
         </div>
+        <div class="kanban-panel" id="kanbanPanel" style="display:none;"></div>
       </div>
     </div>
 
@@ -439,7 +480,15 @@ function calcScore(rout,chks){
   return{score10,donePts,totalPts};
 }
 
-function parseTimeRange(timeStr){
+function sortByTime(tasks){
+  return [...tasks].sort((a,b)=>{
+    const ta=parseTimeRange(a.time),tb=parseTimeRange(b.time);
+    if(!ta&&!tb)return 0;
+    if(!ta)return 1;
+    if(!tb)return-1;
+    return ta.start-tb.start;
+  });
+}
   // Expects "HH:MM–HH:MM", returns {start, end} in minutes or null
   if(!timeStr)return null;
   const m=timeStr.match(/(\d{1,2}):(\d{2})[–\-](\d{1,2}):(\d{2})/);
@@ -576,7 +625,7 @@ function updateScoreBanner(){
 }
 
 function renderDayTasks(day){
-  const ts=routine[day]||[];
+  const ts=sortByTime(routine[day]||[]);
   const totalPts=ts.reduce((s,t)=>s+(t.points||1),0);
   const donePts=ts.filter(t=>checks[t.id]).reduce((s,t)=>s+(t.points||1),0);
   const pct=totalPts?Math.round(donePts/totalPts*100):0;
@@ -621,6 +670,7 @@ async function toggleCheck(id,day){
   snapshotWeek();
   await saveChecks();
   await saveHistory();
+  if(trackerMode==='kanban'){renderKanban();updateWeekBar();updateScoreBanner();return;}
   renderDayTasks(day);
   updateWeekBar();
   updateScoreBanner();
@@ -654,7 +704,95 @@ function updateWeekBar(){
   document.getElementById('weekPct').textContent=pct+'%';
 }
 
-// ═══ HISTORY ═══
+// ═══ KANBAN ═══
+let trackerMode='list'; // 'list' | 'kanban'
+
+function toggleTrackerView(){
+  trackerMode = trackerMode==='list'?'kanban':'list';
+  const btn=document.getElementById('viewToggleBtn');
+  const listEl=document.querySelector('.tracker-panel');
+  const stripEl=document.getElementById('dayStrip');
+  const kanbanEl=document.getElementById('kanbanPanel');
+  if(trackerMode==='kanban'){
+    btn.classList.add('active');
+    btn.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="5" width="6" height="6" rx="1"/><rect x="3" y="13" width="6" height="6" rx="1"/><line x1="13" y1="8" x2="21" y2="8"/><line x1="13" y1="16" x2="21" y2="16"/></svg>`;
+    listEl.style.display='none';
+    stripEl.style.display='none';
+    kanbanEl.style.display='flex';
+    renderKanban();
+  } else {
+    btn.classList.remove('active');
+    btn.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="7" height="18" rx="1"/><rect x="14" y="3" width="7" height="11" rx="1"/><rect x="14" y="17" width="7" height="4" rx="1"/></svg>`;
+    listEl.style.display='';
+    stripEl.style.display='';
+    kanbanEl.style.display='none';
+    renderTracker(activeDay);
+  }
+}
+
+function renderKanban(){
+  const panel=document.getElementById('kanbanPanel');
+  panel.innerHTML='';
+  const todayIdx_=todayIdx();
+  DAYS.forEach((day,i)=>{
+    const ts=sortByTime(routine[day]||[]);
+    const conflicts=getConflictIds(ts);
+    const totalPts=ts.reduce((s,t)=>s+(t.points||1),0);
+    const donePts=ts.filter(t=>checks[t.id]).reduce((s,t)=>s+(t.points||1),0);
+    const pct=totalPts?Math.round(donePts/totalPts*100):0;
+    const g=gradeOf(totalPts?+(donePts/totalPts*10).toFixed(1):0);
+    const isToday=i===todayIdx_;
+
+    const col=document.createElement('div');
+    col.className='kb-col'+(isToday?' kb-today':'');
+    col.innerHTML=`
+      <div class="kb-col-hdr">
+        <div class="kb-col-name">${isToday?'● ':''} ${DAYS_SHORT[i]}</div>
+        <div class="kb-col-meta">
+          <div class="kb-prog"><div class="kb-prog-fill" style="width:${pct}%;background:${g.color};"></div></div>
+          <span class="kb-col-pct">${donePts}/${totalPts}pts</span>
+        </div>
+      </div>
+      <div class="kb-tasks" id="kbt_${i}"></div>`;
+    panel.appendChild(col);
+
+    const taskContainer=col.querySelector(`#kbt_${i}`);
+    if(!ts.length){
+      taskContainer.innerHTML='<div class="kb-empty">SEM TAREFAS</div>';
+      return;
+    }
+    ts.forEach(task=>{
+      const ck=!!checks[task.id];
+      const pts=task.points||1;
+      const hasConflict=conflicts.has(task.id);
+      const card=document.createElement('div');
+      card.className='kb-card'+(ck?' kb-done':'')+(hasConflict?' kb-conflict':'');
+      card.innerHTML=`
+        <div class="kb-card-top">
+          <div class="kb-chk">${ck?'<svg width="9" height="9" viewBox="0 0 11 11" fill="none"><path d="M1.5 5.5l3 3 5-5" stroke="#0c0c10" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>':''}</div>
+          <div class="kb-icon">${task.icon}</div>
+          <div class="kb-label">${task.label}</div>
+        </div>
+        <div class="kb-footer">
+          <span class="kb-time">${task.time}</span>
+          <span class="kb-pts">${pts}pt${pts>1?'s':''}</span>
+          ${hasConflict?'<span class="kb-conflict-tag">⚠</span>':''}
+        </div>`;
+      card.onclick=()=>toggleCheckKanban(task.id,day);
+      taskContainer.appendChild(card);
+    });
+  });
+}
+
+async function toggleCheckKanban(id,day){
+  checks[id]=!checks[id];
+  snapshotWeek();
+  await saveChecks();
+  await saveHistory();
+  updateWeekBar();
+  updateScoreBanner();
+  renderKanban();
+}
 function renderHistory(){
   snapshotWeek();
   const list=document.getElementById('histList');
@@ -738,7 +876,7 @@ function renderEditor(day){
 }
 
 function renderEditorTasks(day){
-  const ts=pending[day]||[];
+  const ts=sortByTime(pending[day]||[]);
   const conflicts=getConflictIds(ts);
   const list=document.getElementById('edTasksList');
   list.innerHTML='';
@@ -828,6 +966,7 @@ function addTask(){
 }
 
 async function saveChanges(){
+  DAYS.forEach(d=>{ if(pending[d]) pending[d]=sortByTime(pending[d]); });
   routine=clone(pending);
   await saveRoutine();
   snapshotWeek();
