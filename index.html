@@ -256,8 +256,67 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
 .toast{position:fixed;bottom:calc(64px + 12px);left:50%;transform:translateX(-50%) translateY(8px);background:var(--accent);color:#0c0c10;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:1px;padding:9px 18px;border-radius:8px;z-index:999;opacity:0;transition:all .25s;pointer-events:none;white-space:nowrap;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
+/* ═══ MATERIAIS TABS ═══ */
+.refs-header{padding:16px 16px 0;flex-shrink:0;border-bottom:1px solid var(--b1);}
+.refs-title{font-family:var(--mono);font-size:15px;font-weight:700;margin-bottom:10px;}
+.refs-tabs{display:flex;gap:0;}
+.refs-tab{font-family:var(--mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:8px 16px;border:none;background:transparent;color:var(--muted2);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;}
+.refs-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+.refs-panel{display:none;flex:1;overflow-y:auto;flex-direction:column;}
+.refs-panel.active{display:flex;}
+
+/* ═══ LIVROS ═══ */
+.books-toolbar{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--b1);flex-shrink:0;}
+.books-filters{display:flex;gap:6px;flex:1;overflow-x:auto;scrollbar-width:none;}
+.books-filters::-webkit-scrollbar{display:none;}
+.bfilter{font-family:var(--mono);font-size:9px;letter-spacing:1px;padding:4px 10px;border-radius:20px;border:1px solid var(--b1);background:transparent;color:var(--muted2);cursor:pointer;white-space:nowrap;transition:all .15s;}
+.bfilter.active{border-color:var(--accent);color:var(--accent);background:rgba(232,197,71,.08);}
+.books-list{flex:1;overflow-y:auto;padding:12px 16px 24px;display:flex;flex-direction:column;gap:8px;}
+.book-card{border:1px solid var(--b1);border-radius:10px;background:var(--s1);padding:12px 14px;display:flex;gap:12px;align-items:flex-start;}
+.book-status-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px;}
+.book-info{flex:1;min-width:0;}
+.book-title{font-size:14px;font-weight:500;color:var(--text);}
+.book-author{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:2px;}
+.book-meta{display:flex;align-items:center;gap:8px;margin-top:6px;flex-wrap:wrap;}
+.book-badge{font-family:var(--mono);font-size:9px;padding:2px 8px;border-radius:10px;}
+.book-rating{font-size:10px;color:var(--accent);}
+.book-notes{font-size:11px;color:var(--muted2);margin-top:5px;line-height:1.5;}
+.book-actions{display:flex;gap:4px;flex-shrink:0;}
+.book-act-btn{width:26px;height:26px;border-radius:6px;border:1px solid transparent;background:transparent;color:var(--muted);font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.book-act-btn:hover{background:var(--b2);color:var(--text);}
+.book-act-btn.del:hover{background:rgba(224,90,90,.15);color:var(--danger);}
+.books-empty{text-align:center;padding:48px 16px;font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:1px;line-height:2;}
+.refs-body{padding:12px 16px 24px;display:flex;flex-direction:column;gap:16px;}
+.refs-phase{border:1px solid var(--b1);border-radius:12px;overflow:hidden;}
+.refs-phase-hdr{padding:12px 16px;background:var(--s1);border-bottom:1px solid var(--b1);cursor:pointer;display:flex;align-items:center;justify-content:space-between;}
+.refs-phase-title{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;}
+.refs-phase-sub{font-family:var(--mono);font-size:9px;color:var(--muted);margin-top:2px;}
+.refs-phase-chevron{font-size:13px;color:var(--muted);transition:transform .2s;display:inline-block;}
+.refs-phase-body{display:none;flex-direction:column;gap:0;}
+.refs-phase-body.open{display:flex;}
+.refs-tech{border-bottom:1px solid var(--b1);}
+.refs-tech:last-child{border-bottom:none;}
+.refs-tech-hdr{padding:10px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;}
+.refs-tech-icon{font-size:16px;flex-shrink:0;}
+.refs-tech-name{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--text);flex:1;}
+.refs-tech-slot{font-family:var(--mono);font-size:9px;color:var(--muted);white-space:nowrap;}
+.refs-tech-chevron{font-size:11px;color:var(--muted);transition:transform .2s;display:inline-block;}
+.refs-links{display:none;flex-direction:column;gap:0;background:var(--bg);padding:4px 0 8px;}
+.refs-links.open{display:flex;}
+.refs-link{display:flex;align-items:center;gap:12px;padding:8px 16px 8px 42px;text-decoration:none;transition:background .1s;}
+.refs-link:hover{background:rgba(255,255,255,.03);}
+.refs-link-info{flex:1;}
+.refs-link-name{font-size:13px;color:var(--text);}
+.refs-link-meta{font-family:var(--mono);font-size:9px;color:var(--muted);margin-top:1px;}
+.refs-link-badge{font-family:var(--mono);font-size:8px;padding:2px 6px;border-radius:6px;white-space:nowrap;}
+.badge-free{background:rgba(168,224,90,.12);color:var(--green);}
+.badge-paid{background:rgba(122,180,255,.12);color:var(--blue);}
+.refs-link-arrow{font-size:12px;color:var(--muted);}
+.refs-goal{padding:10px 16px;font-family:var(--mono);font-size:9px;color:var(--muted);line-height:1.6;border-top:1px solid var(--b1);background:var(--s2);}
+
 /* DESKTOP */
 @media(min-width:680px){
+  .refs-body{max-width:680px;}
   .tracker-body{flex-direction:row;}
   .day-strip{flex-direction:column;width:150px;flex-shrink:0;overflow-y:auto;overflow-x:hidden;border-right:1px solid var(--b1);border-bottom:none;padding:14px 10px;align-items:stretch;gap:4px;}
   .day-pill{flex-direction:row;justify-content:space-between;padding:9px 12px;min-width:unset;}
@@ -341,6 +400,26 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
         </div>
       </div>
     </div>
+    <!-- ④ MATERIAIS -->
+    <div class="view" id="view-refs">
+      <div class="refs-header">
+        <div class="refs-title">Materiais</div>
+        <div class="refs-tabs">
+          <button class="refs-tab active" id="rtab-plano" onclick="switchRefsTab('plano')">Plano de estudo</button>
+          <button class="refs-tab" id="rtab-livros" onclick="switchRefsTab('livros')">Livros</button>
+        </div>
+      </div>
+      <div class="refs-panel active" id="rpanel-plano">
+        <div class="refs-body" id="refsBody"></div>
+      </div>
+      <div class="refs-panel" id="rpanel-livros">
+        <div class="books-toolbar">
+          <div class="books-filters" id="booksFilters"></div>
+          <button class="btn btn-primary" style="font-size:9px;padding:5px 12px;flex-shrink:0;" onclick="openBookForm()">+ Livro</button>
+        </div>
+        <div class="books-list" id="booksList"></div>
+      </div>
+    </div>
   </div>
 
   <nav class="bottom-nav">
@@ -351,6 +430,10 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
     <button class="bnav-btn" id="bn-history" onclick="switchView('history',this)">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
       Histórico
+    </button>
+    <button class="bnav-btn" id="bn-refs" onclick="switchView('refs',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      Materiais
     </button>
     <button class="bnav-btn" id="bn-editor" onclick="switchView('editor',this)">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
@@ -398,6 +481,39 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
   </div>
 </div>
 
+<!-- BOOK FORM MODAL -->
+<div class="modal-overlay" id="bookModal" onclick="closeBookModal(event)">
+  <div class="modal-sheet" style="padding:0 0 16px;">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="bookModalTitle">Adicionar livro</div>
+    <div style="padding:0 16px;display:flex;flex-direction:column;gap:10px;">
+      <input class="ifield" id="bfTitle" type="text" placeholder="Título" style="width:100%;"/>
+      <input class="ifield" id="bfAuthor" type="text" placeholder="Autor" style="width:100%;"/>
+      <div style="display:flex;gap:8px;">
+        <select class="ifield" id="bfStatus" style="flex:1;">
+          <option value="quero">📚 Quero ler</option>
+          <option value="lendo">📖 Lendo</option>
+          <option value="concluido">✅ Concluído</option>
+          <option value="pausado">⏸ Pausado</option>
+        </select>
+        <select class="ifield" id="bfRating" style="width:110px;">
+          <option value="0">Sem nota</option>
+          <option value="1">★ 1</option>
+          <option value="2">★★ 2</option>
+          <option value="3">★★★ 3</option>
+          <option value="4">★★★★ 4</option>
+          <option value="5">★★★★★ 5</option>
+        </select>
+      </div>
+      <textarea class="ifield" id="bfNotes" placeholder="Notas (opcional)" rows="2" style="width:100%;resize:none;font-family:var(--sans);"></textarea>
+      <div style="display:flex;gap:8px;margin-top:4px;">
+        <button class="btn btn-primary" style="flex:1;" onclick="saveBook()">Salvar</button>
+        <button class="btn" onclick="closeBookModal()" style="flex:1;">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -412,6 +528,7 @@ const DEFAULT_ROUTINE={
   Segunda:[
     {id:'seg1',icon:'💼',label:'Trabalho (manhã)',time:'08:45–12:15',points:6},
     {id:'seg2',icon:'💼',label:'Trabalho (tarde)',time:'13:30–18:00',points:6},
+    {id:'seg_est',icon:'💻',label:'Estudo — JavaScript',time:'18:45–19:30',points:7},
     {id:'seg3',icon:'🎓',label:'Pós-graduação',time:'19:30–21:00',points:8},
     {id:'seg4',icon:'📖',label:'Leitura',time:'22:00–22:20',points:4},
   ],
@@ -419,6 +536,7 @@ const DEFAULT_ROUTINE={
     {id:'ter1',icon:'🏋️',label:'Academia',time:'06:50–07:50',points:9},
     {id:'ter2',icon:'💼',label:'Trabalho (manhã)',time:'08:45–12:15',points:6},
     {id:'ter3',icon:'💼',label:'Trabalho (tarde)',time:'13:30–18:00',points:6},
+    {id:'ter_est',icon:'💻',label:'Estudo — JavaScript',time:'18:45–19:30',points:7},
     {id:'ter4',icon:'🎵',label:'Gaita',time:'19:30–20:00',points:5},
     {id:'ter5',icon:'📖',label:'Leitura',time:'22:00–22:20',points:4},
   ],
@@ -426,6 +544,7 @@ const DEFAULT_ROUTINE={
     {id:'qua1',icon:'🏋️',label:'Academia',time:'06:50–07:50',points:9},
     {id:'qua2',icon:'💼',label:'Trabalho (manhã)',time:'08:45–12:15',points:6},
     {id:'qua3',icon:'💼',label:'Trabalho (tarde)',time:'13:30–18:00',points:6},
+    {id:'qua_est',icon:'💻',label:'Estudo — JavaScript',time:'18:45–19:30',points:7},
     {id:'qua4',icon:'🎓',label:'Pós-graduação',time:'19:30–20:30',points:8},
     {id:'qua5',icon:'📖',label:'Leitura',time:'22:00–22:20',points:4},
   ],
@@ -440,16 +559,19 @@ const DEFAULT_ROUTINE={
     {id:'sex2',icon:'💼',label:'Trabalho (manhã)',time:'08:45–12:15',points:6},
     {id:'sex3',icon:'💼',label:'Trabalho (tarde)',time:'13:30–18:00',points:6},
     {id:'sex4',icon:'🎵',label:'Gaita',time:'19:00–19:30',points:5},
+    {id:'sex_est',icon:'🎨',label:'Estudo — CSS',time:'20:00–20:45',points:7},
     {id:'sex5',icon:'📖',label:'Leitura',time:'22:00–22:20',points:4},
   ],
   Sábado:[
     {id:'sab1',icon:'🧹',label:'Faxina',time:'09:00–10:30',points:5},
     {id:'sab2',icon:'👕',label:'Lavar roupa',time:'09:00–10:00',points:4},
+    {id:'sab_est',icon:'🗃️',label:'Estudo — SQL',time:'11:00–12:00',points:8},
     {id:'sab3',icon:'🎵',label:'Gaita (sessão longa)',time:'15:00–16:00',points:6},
     {id:'sab4',icon:'📖',label:'Leitura',time:'22:00–22:20',points:4},
   ],
   Domingo:[
     {id:'dom1',icon:'🍱',label:'Marmita da semana',time:'10:00–12:00',points:7},
+    {id:'dom_est',icon:'☁️',label:'Estudo — Cloudflare',time:'14:00–15:00',points:7},
     {id:'dom2',icon:'🎓',label:'Revisão pós (opcional)',time:'19:00–19:30',points:5},
     {id:'dom3',icon:'📖',label:'Leitura',time:'22:00–22:20',points:4},
   ],
@@ -554,7 +676,7 @@ async function loadAll(){
     const r=await store.get('routine_data');
     if(r){
       const saved=JSON.parse(r);
-      const hasSeg4=saved.Segunda&&saved.Segunda.some(t=>t.id==='seg4');
+      const hasSeg4=saved.Segunda&&saved.Segunda.some(t=>t.label&&t.label.includes('JavaScript'));
       if(hasSeg4)routine=saved;
       else await store.set('routine_data',JSON.stringify(routine));
     } else {
@@ -621,7 +743,7 @@ function updateScoreBanner(){
 
   const prevMon=getMondayKey(-1);
   const prev=history[prevMon];
-  if(prev&&prev.score10!==undefined){
+  if(prev&&prev.score10!==undefined&&(prev.donePts||0)>0){
     const pg=gradeOf(prev.score10);
     document.getElementById('scorePrev').textContent=prev.score10.toFixed(1)+'/10';
     document.getElementById('scorePrev').style.color=pg.color;
@@ -806,7 +928,10 @@ function renderHistory(){
   snapshotWeek();
   const list=document.getElementById('histList');
   list.innerHTML='';
-  const keys=Object.keys(history).sort((a,b)=>b.localeCompare(a));
+  const curMon=getMondayKey();
+  const keys=Object.keys(history)
+    .filter(mon=>mon===curMon||(history[mon].donePts||0)>0)
+    .sort((a,b)=>b.localeCompare(a));
   if(!keys.length){list.innerHTML='<div class="hist-empty">Nenhum histórico ainda.<br>Complete tarefas para<br>registrar semanas.</div>';return;}
   keys.forEach(mon=>{
     const h=history[mon];
@@ -1076,7 +1201,255 @@ function confirmTime(){
 }
 function closeTimeModal(e){if(e.target===document.getElementById('timeModal'))document.getElementById('timeModal').classList.remove('open');}
 
-// ═══ LAYOUT ═══
+// ═══ LIVROS ═══
+let books=[];
+let booksFilter='todos';
+let editingBookId=null;
+
+const BOOK_STATUS={
+  quero:{label:'Quero ler',color:'var(--muted2)',bg:'rgba(100,100,130,.15)'},
+  lendo:{label:'Lendo',color:'var(--accent)',bg:'rgba(232,197,71,.12)'},
+  concluido:{label:'Concluído',color:'var(--green)',bg:'rgba(168,224,90,.12)'},
+  pausado:{label:'Pausado',color:'var(--blue)',bg:'rgba(122,180,255,.12)'},
+};
+
+async function loadBooks(){
+  try{const r=await store.get('books_data');books=r?JSON.parse(r):[];}
+  catch(e){books=[];}
+}
+async function saveBooks(){
+  await store.set('books_data',JSON.stringify(books));
+}
+
+function renderBooks(){
+  // filters
+  const filters=document.getElementById('booksFilters');
+  const filterOpts=[
+    {key:'todos',label:'Todos'},
+    {key:'lendo',label:'📖 Lendo'},
+    {key:'quero',label:'📚 Quero ler'},
+    {key:'concluido',label:'✅ Concluídos'},
+    {key:'pausado',label:'⏸ Pausados'},
+  ];
+  filters.innerHTML='';
+  filterOpts.forEach(f=>{
+    const btn=document.createElement('button');
+    btn.className='bfilter'+(booksFilter===f.key?' active':'');
+    btn.textContent=f.label;
+    btn.onclick=()=>{booksFilter=f.key;renderBooks();};
+    filters.appendChild(btn);
+  });
+
+  // list
+  const list=document.getElementById('booksList');
+  const filtered=booksFilter==='todos'?books:books.filter(b=>b.status===booksFilter);
+  list.innerHTML='';
+
+  if(!filtered.length){
+    list.innerHTML=`<div class="books-empty">NENHUM LIVRO AQUI<br>${booksFilter==='todos'?'Clica em + Livro para adicionar':'Nenhum livro nesta categoria'}</div>`;
+    return;
+  }
+
+  // sort: lendo first, then quero, pausado, concluido
+  const order={lendo:0,quero:1,pausado:2,concluido:3};
+  const sorted=[...filtered].sort((a,b)=>(order[a.status]||0)-(order[b.status]||0));
+
+  sorted.forEach(book=>{
+    const st=BOOK_STATUS[book.status]||BOOK_STATUS.quero;
+    const stars=book.rating>0?'★'.repeat(book.rating)+'☆'.repeat(5-book.rating):'';
+    const card=document.createElement('div');
+    card.className='book-card';
+    card.innerHTML=`
+      <div class="book-status-dot" style="background:${st.color};"></div>
+      <div class="book-info">
+        <div class="book-title">${book.title}</div>
+        ${book.author?`<div class="book-author">${book.author}</div>`:''}
+        <div class="book-meta">
+          <span class="book-badge" style="color:${st.color};background:${st.bg};">${st.label}</span>
+          ${stars?`<span class="book-rating">${stars}</span>`:''}
+        </div>
+        ${book.notes?`<div class="book-notes">${book.notes}</div>`:''}
+      </div>
+      <div class="book-actions">
+        <button class="book-act-btn" onclick="openBookForm('${book.id}')" title="Editar">✏</button>
+        <button class="book-act-btn del" onclick="deleteBook('${book.id}')" title="Excluir">✕</button>
+      </div>`;
+    list.appendChild(card);
+  });
+}
+
+function openBookForm(id){
+  editingBookId=id||null;
+  const book=id?books.find(b=>b.id===id):null;
+  document.getElementById('bookModalTitle').textContent=book?'Editar livro':'Adicionar livro';
+  document.getElementById('bfTitle').value=book?book.title:'';
+  document.getElementById('bfAuthor').value=book?book.author:'';
+  document.getElementById('bfStatus').value=book?book.status:'quero';
+  document.getElementById('bfRating').value=book?book.rating:0;
+  document.getElementById('bfNotes').value=book?book.notes:'';
+  document.getElementById('bookModal').classList.add('open');
+  setTimeout(()=>document.getElementById('bfTitle').focus(),100);
+}
+
+async function saveBook(){
+  const title=document.getElementById('bfTitle').value.trim();
+  if(!title){document.getElementById('bfTitle').focus();return;}
+  const data={
+    id:editingBookId||'book_'+Date.now(),
+    title,
+    author:document.getElementById('bfAuthor').value.trim(),
+    status:document.getElementById('bfStatus').value,
+    rating:parseInt(document.getElementById('bfRating').value)||0,
+    notes:document.getElementById('bfNotes').value.trim(),
+    updatedAt:Date.now(),
+  };
+  if(editingBookId){
+    const idx=books.findIndex(b=>b.id===editingBookId);
+    if(idx>=0)books[idx]=data;
+  } else {
+    books.unshift(data);
+  }
+  await saveBooks();
+  document.getElementById('bookModal').classList.remove('open');
+  renderBooks();
+  showToast(editingBookId?'Livro atualizado':'Livro adicionado');
+  editingBookId=null;
+}
+
+async function deleteBook(id){
+  books=books.filter(b=>b.id!==id);
+  await saveBooks();
+  renderBooks();
+  showToast('Livro removido');
+}
+
+function closeBookModal(e){
+  if(!e||e.target===document.getElementById('bookModal'))
+    document.getElementById('bookModal').classList.remove('open');
+}
+
+function switchRefsTab(tab){
+  document.querySelectorAll('.refs-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.refs-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('rtab-'+tab).classList.add('active');
+  document.getElementById('rpanel-'+tab).classList.add('active');
+  if(tab==='livros')renderBooks();
+  if(tab==='plano')renderRefs();
+}
+const REFS_DATA=[
+  {
+    phase:'Fase 1',label:'meses 1–2',color:'var(--accent)',
+    goal:'Fechar buracos no que já usas. JS conecta tudo, CSS ganha com prática, SQL escala para análise real.',
+    techs:[
+      {icon:'🟨',name:'JavaScript',slot:'Seg/Ter/Qua · 18:45–19:30',links:[
+        {name:'Curso em Vídeo — JavaScript',author:'Gustavo Guanabara',type:'YouTube',lang:'PT-BR',free:true,url:'https://www.youtube.com/playlist?list=PLHz_AreHm4dlsK3Nr9GVvXCbpQyHQl1o1'},
+        {name:'javascript.info',author:'Ilya Kantor',type:'Site',lang:'EN (parcial PT-BR)',free:true,url:'https://javascript.info'},
+        {name:'Rodrigo Branas — ES6+',author:'Rodrigo Branas',type:'YouTube',lang:'PT-BR',free:true,url:'https://www.youtube.com/@RodrigoBranas'},
+      ]},
+      {icon:'🎨',name:'CSS',slot:'Sex · 20:00–20:45',links:[
+        {name:'Curso em Vídeo — HTML5 e CSS3',author:'Gustavo Guanabara',type:'YouTube',lang:'PT-BR',free:true,url:'https://www.youtube.com/playlist?list=PLHz_AreHm4dkZ9-atAiOMQnQkCBYto6GJ'},
+        {name:'Flexbox Froggy',author:'Codepip',type:'Jogo',lang:'PT-BR',free:true,url:'https://flexboxfroggy.com/#pt-br'},
+        {name:'Grid Garden',author:'Codepip',type:'Jogo',lang:'PT-BR',free:true,url:'https://cssgridgarden.com/#pt-br'},
+        {name:'Kevin Powell',author:'Kevin Powell',type:'YouTube',lang:'EN',free:true,url:'https://www.youtube.com/@KevinPowell'},
+        {name:'Origamid — CSS',author:'Origamid',type:'Curso',lang:'PT-BR',free:false,url:'https://www.origamid.com/curso/css-com-sass'},
+      ]},
+      {icon:'🗃️',name:'SQL',slot:'Sáb · 11:00–12:00',links:[
+        {name:'Curso em Vídeo — MySQL',author:'Gustavo Guanabara',type:'YouTube',lang:'PT-BR',free:true,url:'https://www.youtube.com/playlist?list=PLHz_AreHm4dkBs-795Ay0_2nBW2s5C8nS'},
+        {name:'Mode SQL Tutorial',author:'Mode',type:'Site',lang:'EN',free:true,url:'https://mode.com/sql-tutorial'},
+        {name:'Filipe Deschamps — SQL',author:'Filipe Deschamps',type:'YouTube',lang:'PT-BR',free:true,url:'https://www.youtube.com/@FilipeDeschamps'},
+      ]},
+    ]
+  },
+  {
+    phase:'Fase 2',label:'meses 3–4',color:'var(--blue)',
+    goal:'Python para análise de dados aplicada ao trabalho. Com JS e SQL sólidos, a curva de aprendizado é menor.',
+    techs:[
+      {icon:'🐍',name:'Python',slot:'Seg/Ter/Qua · 18:45–19:30 + Sáb · 11:00–12:00',links:[
+        {name:'Curso em Vídeo — Python',author:'Gustavo Guanabara',type:'YouTube',lang:'PT-BR',free:true,url:'https://www.youtube.com/playlist?list=PLHz_AreHm4dlKP6QQCekuIPky1CiwmdI6'},
+        {name:'Hashtag Treinamentos — Python para Dados',author:'Hashtag',type:'YouTube',lang:'PT-BR',free:true,url:'https://www.youtube.com/@HashtagTreinamentos'},
+        {name:'Mario Filho — Análise de Dados',author:'Mario Filho',type:'YouTube',lang:'PT-BR',free:true,url:'https://www.youtube.com/@mariofilhoml'},
+        {name:'Python para Análise de Dados',author:'Wes McKinney',type:'Livro',lang:'EN (PT-BR disponível)',free:false,url:'https://wesmckinney.com/book'},
+      ]},
+      {icon:'☁️',name:'Cloudflare',slot:'Dom · 14:00–15:00',links:[
+        {name:'Documentação oficial — Workers',author:'Cloudflare',type:'Docs',lang:'EN',free:true,url:'https://developers.cloudflare.com/workers'},
+        {name:'Documentação oficial — D1',author:'Cloudflare',type:'Docs',lang:'EN',free:true,url:'https://developers.cloudflare.com/d1'},
+        {name:'Documentação oficial — Pages',author:'Cloudflare',type:'Docs',lang:'EN',free:true,url:'https://developers.cloudflare.com/pages'},
+      ]},
+    ]
+  },
+  {
+    phase:'Fase 3',label:'meses 5–6',color:'var(--green)',
+    goal:'Cloudflare aprofundado para portfólio + PHP de leitura para entender sites WordPress/Elementor.',
+    techs:[
+      {icon:'☁️',name:'Cloudflare (avançado)',slot:'Sáb · 11:00–12:00 + Dom · 14:00–15:00',links:[
+        {name:'Documentação oficial — R2',author:'Cloudflare',type:'Docs',lang:'EN',free:true,url:'https://developers.cloudflare.com/r2'},
+        {name:'Documentação oficial — Zero Trust',author:'Cloudflare',type:'Docs',lang:'EN',free:true,url:'https://developers.cloudflare.com/cloudflare-one'},
+        {name:'Cloudflare TV',author:'Cloudflare',type:'YouTube',lang:'EN',free:true,url:'https://www.youtube.com/@CloudflareTV'},
+      ]},
+      {icon:'🐘',name:'PHP (leitura)',slot:'Sex · 20:00–20:45',links:[
+        {name:'Curso em Vídeo — PHP',author:'Gustavo Guanabara',type:'YouTube',lang:'PT-BR',free:true,url:'https://www.youtube.com/playlist?list=PLHz_AreHm4dm4beCCCmW4xwpmLf6EHY9k'},
+        {name:'CFBCursos — PHP',author:'CFBCursos',type:'YouTube',lang:'PT-BR',free:true,url:'https://www.youtube.com/@cfbcursos'},
+        {name:'PHP Manual',author:'PHP.net',type:'Docs',lang:'PT-BR',free:true,url:'https://www.php.net/manual/pt_BR'},
+        {name:'Laracasts — PHP',author:'Laracasts',type:'Curso',lang:'EN',free:false,url:'https://laracasts.com/series/php-for-beginners-2023-edition'},
+      ]},
+    ]
+  },
+];
+
+function renderRefs(){
+  const body=document.getElementById('refsBody');
+  body.innerHTML='';
+  REFS_DATA.forEach((phase,pi)=>{
+    const sec=document.createElement('div');
+    sec.className='refs-phase';
+    sec.innerHTML=`
+      <div class="refs-phase-hdr" onclick="toggleRefsPhase(${pi})">
+        <div>
+          <div class="refs-phase-title" style="color:${phase.color};">${phase.phase} <span style="color:var(--muted);font-weight:400;">· ${phase.label}</span></div>
+          <div class="refs-phase-sub">${phase.techs.map(t=>t.name).join(' · ')}</div>
+        </div>
+        <span class="refs-phase-chevron" id="rpc_${pi}">▼</span>
+      </div>
+      <div class="refs-phase-body" id="rpb_${pi}">
+        <div class="refs-goal">${phase.goal}</div>
+        ${phase.techs.map((tech,ti)=>`
+          <div class="refs-tech">
+            <div class="refs-tech-hdr" onclick="toggleRefsTech(${pi},${ti})">
+              <span class="refs-tech-icon">${tech.icon}</span>
+              <span class="refs-tech-name">${tech.name}</span>
+              <span class="refs-tech-slot">${tech.slot}</span>
+              <span class="refs-tech-chevron" id="rtc_${pi}_${ti}">›</span>
+            </div>
+            <div class="refs-links" id="rtl_${pi}_${ti}">
+              ${tech.links.map(l=>`
+                <a class="refs-link" href="${l.url}" target="_blank" rel="noopener">
+                  <div class="refs-link-info">
+                    <div class="refs-link-name">${l.name}</div>
+                    <div class="refs-link-meta">${l.author} · ${l.type} · ${l.lang}</div>
+                  </div>
+                  <span class="refs-link-badge ${l.free?'badge-free':'badge-paid'}">${l.free?'Grátis':'Pago'}</span>
+                  <span class="refs-link-arrow">↗</span>
+                </a>`).join('')}
+            </div>
+          </div>`).join('')}
+      </div>`;
+    body.appendChild(sec);
+  });
+}
+
+function toggleRefsPhase(pi){
+  const body=document.getElementById(`rpb_${pi}`);
+  const chev=document.getElementById(`rpc_${pi}`);
+  const open=body.classList.toggle('open');
+  chev.style.transform=open?'rotate(180deg)':'';
+}
+
+function toggleRefsTech(pi,ti){
+  const links=document.getElementById(`rtl_${pi}_${ti}`);
+  const chev=document.getElementById(`rtc_${pi}_${ti}`);
+  const open=links.classList.toggle('open');
+  chev.style.transform=open?'rotate(90deg)':'';
+}
 function applyLayout(){
   const isMob=window.innerWidth<680;
   const edLeft=document.getElementById('edLeft');
@@ -1104,6 +1477,7 @@ function switchView(view,btn){
   applyLayout();
   if(view==='tracker')renderTracker(activeDay);
   if(view==='history')renderHistory();
+  if(view==='refs')renderRefs();
   if(view==='editor')renderEditor(activeCmsDay);
 }
 
@@ -1115,6 +1489,7 @@ function showToast(msg){const t=document.getElementById('toast');t.textContent=m
 window.addEventListener('resize',()=>{applyLayout();if(currentView==='editor')renderEditor(activeCmsDay);});
 (async()=>{
   await loadAll();
+  await loadBooks();
   snapshotWeek();
   await saveHistory();
   applyLayout();
