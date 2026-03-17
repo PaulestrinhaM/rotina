@@ -222,6 +222,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
 
 /* ═══ ICON PICKER MODAL ═══ */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;display:none;align-items:flex-end;justify-content:center;}
+#iconModal{z-index:300;}
 .modal-overlay.open{display:flex;}
 .modal-sheet{background:var(--s1);border-radius:16px 16px 0 0;width:100%;max-width:480px;padding:0;max-height:70vh;display:flex;flex-direction:column;padding-bottom:var(--sab);}
 .modal-handle{width:36px;height:4px;background:var(--b2);border-radius:2px;margin:12px auto 0;}
@@ -286,7 +287,20 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
 .book-act-btn:hover{background:var(--b2);color:var(--text);}
 .book-act-btn.del:hover{background:rgba(224,90,90,.15);color:var(--danger);}
 .books-empty{text-align:center;padding:48px 16px;font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:1px;line-height:2;}
-.refs-body{padding:12px 16px 24px;display:flex;flex-direction:column;gap:16px;}
+.refs-plano-toolbar{display:flex;align-items:center;gap:8px;padding:10px 16px;border-bottom:1px solid var(--b1);flex-shrink:0;}
+.refs-plano-toolbar .btn{margin-left:auto;}
+.refs-plano-toolbar .btn+.btn{margin-left:0;}
+.refs-edit-actions{display:none;align-items:center;gap:6px;padding:6px 16px;background:var(--s2);border-bottom:1px solid var(--b1);}
+.refs-edit-actions.visible{display:flex;}
+.refs-phase.edit-mode .refs-phase-hdr{cursor:default;}
+.refs-phase-edit-row{display:flex;align-items:center;gap:6px;padding:8px 16px;border-bottom:1px solid var(--b1);background:var(--s2);}
+.refs-tech-edit-row{display:flex;align-items:center;gap:6px;padding:6px 16px 6px 42px;background:rgba(255,255,255,.02);}
+.refs-add-btn{font-family:var(--mono);font-size:9px;color:var(--accent);background:transparent;border:1px dashed rgba(232,197,71,.3);border-radius:6px;padding:5px 12px;cursor:pointer;transition:all .15s;width:100%;}
+.refs-add-btn:hover{border-color:var(--accent);background:rgba(232,197,71,.05);}
+.refs-del-btn{width:24px;height:24px;border-radius:5px;border:1px solid transparent;background:transparent;color:var(--muted);font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;}
+.refs-del-btn:hover{background:rgba(224,90,90,.15);border-color:var(--danger);color:var(--danger);}
+.refs-edit-btn{width:24px;height:24px;border-radius:5px;border:1px solid transparent;background:transparent;color:var(--muted);font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;}
+.refs-edit-btn:hover{background:var(--b2);color:var(--text);}
 .refs-phase{border:1px solid var(--b1);border-radius:12px;overflow:hidden;}
 .refs-phase-hdr{padding:12px 16px;background:var(--s1);border-bottom:1px solid var(--b1);cursor:pointer;display:flex;align-items:center;justify-content:space-between;}
 .refs-phase-title{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;}
@@ -410,6 +424,10 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
         </div>
       </div>
       <div class="refs-panel active" id="rpanel-plano">
+        <div class="refs-plano-toolbar">
+          <button class="btn" id="refsEditBtn" onclick="toggleRefsEdit()" style="font-size:9px;padding:5px 12px;">✏ Editar</button>
+          <button class="btn btn-primary" id="refsAddPhaseBtn" onclick="openPhaseForm()" style="font-size:9px;padding:5px 12px;display:none;">+ Categoria</button>
+        </div>
         <div class="refs-body" id="refsBody"></div>
       </div>
       <div class="refs-panel" id="rpanel-livros">
@@ -476,6 +494,85 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
           <div class="time-sep">:</div>
           <div class="drum-wrap" id="endM"></div>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PHASE FORM MODAL -->
+<div class="modal-overlay" id="phaseModal" onclick="closePhaseModal(event)">
+  <div class="modal-sheet" style="padding:0 0 16px;">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="phaseModalTitle">Nova categoria</div>
+    <div style="padding:0 16px;display:flex;flex-direction:column;gap:10px;">
+      <input class="ifield" id="pfName" type="text" placeholder="Nome (ex: Fase 1)" style="width:100%;"/>
+      <input class="ifield" id="pfLabel" type="text" placeholder="Período (ex: meses 1–2)" style="width:100%;"/>
+      <textarea class="ifield" id="pfGoal" placeholder="Objetivo desta fase" rows="2" style="width:100%;resize:none;font-family:var(--sans);"></textarea>
+      <div style="display:flex;gap:8px;">
+        <label style="font-family:var(--mono);font-size:9px;color:var(--muted);align-self:center;">Cor:</label>
+        <select class="ifield" id="pfColor" style="flex:1;">
+          <option value="var(--accent)">Amarelo</option>
+          <option value="var(--blue)">Azul</option>
+          <option value="var(--green)">Verde</option>
+          <option value="var(--danger)">Vermelho</option>
+          <option value="var(--muted2)">Cinza</option>
+        </select>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:4px;">
+        <button class="btn btn-primary" style="flex:1;" onclick="savePhase()">Salvar</button>
+        <button class="btn" onclick="closePhaseModal()" style="flex:1;">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TECH FORM MODAL -->
+<div class="modal-overlay" id="techModal" onclick="closeTechModal(event)">
+  <div class="modal-sheet" style="padding:0 0 16px;">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="techModalTitle">Nova tecnologia</div>
+    <div style="padding:0 16px;display:flex;flex-direction:column;gap:10px;">
+      <div style="display:flex;gap:8px;">
+        <button class="ifield-icon-btn" id="tfIconBtn" onclick="openIconModal(-1,'tech')" title="Escolher ícone" style="flex-shrink:0;">📌</button>
+        <input class="ifield" id="tfName" type="text" placeholder="Nome (ex: Python)" style="flex:1;"/>
+      </div>
+      <input class="ifield" id="tfSlot" type="text" placeholder="Horário (ex: Seg/Ter · 18:45–19:30)" style="width:100%;"/>
+      <div style="display:flex;gap:8px;margin-top:4px;">
+        <button class="btn btn-primary" style="flex:1;" onclick="saveTech()">Salvar</button>
+        <button class="btn" onclick="closeTechModal()" style="flex:1;">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LINK FORM MODAL -->
+<div class="modal-overlay" id="linkModal" onclick="closeLinkModal(event)">
+  <div class="modal-sheet" style="padding:0 0 16px;">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="linkModalTitle">Novo material</div>
+    <div style="padding:0 16px;display:flex;flex-direction:column;gap:10px;">
+      <input class="ifield" id="lfName" type="text" placeholder="Nome do material" style="width:100%;"/>
+      <input class="ifield" id="lfAuthor" type="text" placeholder="Autor / Canal" style="width:100%;"/>
+      <div style="display:flex;gap:8px;">
+        <select class="ifield" id="lfType" style="flex:1;">
+          <option>YouTube</option>
+          <option>Site</option>
+          <option>Curso</option>
+          <option>Livro</option>
+          <option>Docs</option>
+          <option>Jogo</option>
+          <option>Outro</option>
+        </select>
+        <select class="ifield" id="lfFree" style="width:100px;">
+          <option value="1">Grátis</option>
+          <option value="0">Pago</option>
+        </select>
+      </div>
+      <input class="ifield" id="lfLang" type="text" placeholder="Idioma (ex: PT-BR)" style="width:100%;"/>
+      <input class="ifield" id="lfUrl" type="url" placeholder="URL" style="width:100%;"/>
+      <div style="display:flex;gap:8px;margin-top:4px;">
+        <button class="btn btn-primary" style="flex:1;" onclick="saveLink()">Salvar</button>
+        <button class="btn" onclick="closeLinkModal()" style="flex:1;">Cancelar</button>
       </div>
     </div>
   </div>
@@ -1114,7 +1211,10 @@ async function resetWeekChecks(){checks={};await saveChecks();showToast('Checks 
 function openIconModal(idx,mode){
   iconModalCallback={idx,mode};
   const grid=document.getElementById('iconGrid');
-  const currentIcon=mode==='task'?pending[activeCmsDay][idx].icon:(document.getElementById('newIconBtn')||{}).textContent||'';
+  const currentIcon=
+    mode==='task'?pending[activeCmsDay][idx].icon:
+    mode==='tech'?(document.getElementById('tfIconBtn')||{}).textContent||'':
+    (document.getElementById('newIconBtn')||{}).textContent||'';
   grid.innerHTML='';
   ICONS.forEach(em=>{
     const btn=document.createElement('button');
@@ -1130,6 +1230,9 @@ function selectIcon(em){
   if(mode==='task'){
     pending[activeCmsDay][idx].icon=em;
     renderEditorTasks(activeCmsDay);
+  } else if(mode==='tech'){
+    const btn=document.getElementById('tfIconBtn');
+    if(btn)btn.textContent=em;
   } else {
     const btn=document.getElementById('newIconBtn');
     if(btn)btn.textContent=em;
@@ -1336,7 +1439,7 @@ function switchRefsTab(tab){
   if(tab==='livros')renderBooks();
   if(tab==='plano')renderRefs();
 }
-const REFS_DATA=[
+let REFS_DATA=[
   {
     phase:'Fase 1',label:'meses 1–2',color:'var(--accent)',
     goal:'Fechar buracos no que já usas. JS conecta tudo, CSS ganha com prática, SQL escala para análise real.',
@@ -1396,43 +1499,232 @@ const REFS_DATA=[
   },
 ];
 
+// ═══ REFS STORAGE & EDIT ═══
+let refsEditMode=false;
+let editingPhaseIdx=null,editingTechIdx=null,editingLinkIdx=null;
+
+async function loadRefs(){
+  try{
+    const r=await store.get('refs_data');
+    if(r){REFS_DATA=JSON.parse(r);}
+  }catch(e){}
+}
+async function saveRefs(){
+  await store.set('refs_data',JSON.stringify(REFS_DATA));
+}
+
+function toggleRefsEdit(){
+  refsEditMode=!refsEditMode;
+  const btn=document.getElementById('refsEditBtn');
+  const addBtn=document.getElementById('refsAddPhaseBtn');
+  btn.textContent=refsEditMode?'✓ Concluir':'✏ Editar';
+  btn.className=refsEditMode?'btn btn-primary':'btn';
+  addBtn.style.display=refsEditMode?'':'none';
+  renderRefs();
+}
+
+function openPhaseForm(idx){
+  editingPhaseIdx=idx!==undefined?idx:null;
+  const ph=idx!==undefined?REFS_DATA[idx]:null;
+  document.getElementById('phaseModalTitle').textContent=ph?'Editar categoria':'Nova categoria';
+  document.getElementById('pfName').value=ph?ph.phase:'';
+  document.getElementById('pfLabel').value=ph?ph.label:'';
+  document.getElementById('pfGoal').value=ph?ph.goal:'';
+  document.getElementById('pfColor').value=ph?ph.color:'var(--accent)';
+  document.getElementById('phaseModal').classList.add('open');
+  setTimeout(()=>document.getElementById('pfName').focus(),100);
+}
+async function savePhase(){
+  const name=document.getElementById('pfName').value.trim();
+  if(!name)return;
+  const data={
+    phase:name,
+    label:document.getElementById('pfLabel').value.trim(),
+    goal:document.getElementById('pfGoal').value.trim(),
+    color:document.getElementById('pfColor').value,
+    techs:editingPhaseIdx!==null?REFS_DATA[editingPhaseIdx].techs:[],
+  };
+  if(editingPhaseIdx!==null)REFS_DATA[editingPhaseIdx]=data;
+  else REFS_DATA.push(data);
+  await saveRefs();
+  document.getElementById('phaseModal').classList.remove('open');
+  renderRefs();
+  showToast(editingPhaseIdx!==null?'Categoria atualizada':'Categoria criada');
+  editingPhaseIdx=null;
+}
+async function deletePhase(pi){
+  REFS_DATA.splice(pi,1);
+  await saveRefs();
+  renderRefs();
+  showToast('Categoria removida');
+}
+function closePhaseModal(e){if(!e||e.target===document.getElementById('phaseModal'))document.getElementById('phaseModal').classList.remove('open');}
+
+function openTechForm(pi,ti){
+  editingPhaseIdx=pi;
+  editingTechIdx=ti!==undefined?ti:null;
+  const tech=ti!==undefined?REFS_DATA[pi].techs[ti]:null;
+  document.getElementById('techModalTitle').textContent=tech?'Editar tecnologia':'Nova tecnologia';
+  document.getElementById('tfIconBtn').textContent=tech?tech.icon:'📌';
+  document.getElementById('tfName').value=tech?tech.name:'';
+  document.getElementById('tfSlot').value=tech?tech.slot:'';
+  document.getElementById('techModal').classList.add('open');
+  setTimeout(()=>document.getElementById('tfName').focus(),100);
+}
+async function saveTech(){
+  const name=document.getElementById('tfName').value.trim();
+  if(!name)return;
+  const data={
+    icon:document.getElementById('tfIconBtn').textContent.trim()||'📌',
+    name,slot:document.getElementById('tfSlot').value.trim(),
+    links:editingTechIdx!==null?REFS_DATA[editingPhaseIdx].techs[editingTechIdx].links:[],
+  };
+  if(!REFS_DATA[editingPhaseIdx].techs)REFS_DATA[editingPhaseIdx].techs=[];
+  if(editingTechIdx!==null)REFS_DATA[editingPhaseIdx].techs[editingTechIdx]=data;
+  else REFS_DATA[editingPhaseIdx].techs.push(data);
+  await saveRefs();
+  document.getElementById('techModal').classList.remove('open');
+  renderRefs();
+  showToast(editingTechIdx!==null?'Tecnologia atualizada':'Tecnologia adicionada');
+  editingTechIdx=null;
+}
+async function deleteTech(pi,ti){
+  REFS_DATA[pi].techs.splice(ti,1);
+  await saveRefs();
+  renderRefs();
+  showToast('Tecnologia removida');
+}
+function closeTechModal(e){if(!e||e.target===document.getElementById('techModal'))document.getElementById('techModal').classList.remove('open');}
+
+function openLinkForm(pi,ti,li){
+  editingPhaseIdx=pi;editingTechIdx=ti;
+  editingLinkIdx=li!==undefined?li:null;
+  const link=li!==undefined?REFS_DATA[pi].techs[ti].links[li]:null;
+  document.getElementById('linkModalTitle').textContent=link?'Editar material':'Novo material';
+  document.getElementById('lfName').value=link?link.name:'';
+  document.getElementById('lfAuthor').value=link?link.author:'';
+  document.getElementById('lfType').value=link?link.type:'YouTube';
+  document.getElementById('lfFree').value=link?(link.free?'1':'0'):'1';
+  document.getElementById('lfLang').value=link?link.lang:'PT-BR';
+  document.getElementById('lfUrl').value=link?link.url:'';
+  document.getElementById('linkModal').classList.add('open');
+  setTimeout(()=>document.getElementById('lfName').focus(),100);
+}
+async function saveLink(){
+  const name=document.getElementById('lfName').value.trim();
+  if(!name)return;
+  const data={
+    name,
+    author:document.getElementById('lfAuthor').value.trim(),
+    type:document.getElementById('lfType').value,
+    free:document.getElementById('lfFree').value==='1',
+    lang:document.getElementById('lfLang').value.trim()||'PT-BR',
+    url:document.getElementById('lfUrl').value.trim(),
+  };
+  if(!REFS_DATA[editingPhaseIdx].techs[editingTechIdx].links)
+    REFS_DATA[editingPhaseIdx].techs[editingTechIdx].links=[];
+  if(editingLinkIdx!==null)REFS_DATA[editingPhaseIdx].techs[editingTechIdx].links[editingLinkIdx]=data;
+  else REFS_DATA[editingPhaseIdx].techs[editingTechIdx].links.push(data);
+  await saveRefs();
+  document.getElementById('linkModal').classList.remove('open');
+  renderRefs();
+  showToast(editingLinkIdx!==null?'Material atualizado':'Material adicionado');
+  editingLinkIdx=null;
+}
+async function deleteLink(pi,ti,li){
+  REFS_DATA[pi].techs[ti].links.splice(li,1);
+  await saveRefs();
+  renderRefs();
+  showToast('Material removido');
+}
+function closeLinkModal(e){if(!e||e.target===document.getElementById('linkModal'))document.getElementById('linkModal').classList.remove('open');}
+
 function renderRefs(){
   const body=document.getElementById('refsBody');
   body.innerHTML='';
+  if(!REFS_DATA.length){
+    body.innerHTML='<div style="padding:32px 16px;font-family:var(--mono);font-size:10px;color:var(--muted);text-align:center;letter-spacing:1px;">NENHUMA CATEGORIA<br>Clica em Editar → + Categoria</div>';
+    return;
+  }
   REFS_DATA.forEach((phase,pi)=>{
     const sec=document.createElement('div');
     sec.className='refs-phase';
-    sec.innerHTML=`
-      <div class="refs-phase-hdr" onclick="toggleRefsPhase(${pi})">
-        <div>
-          <div class="refs-phase-title" style="color:${phase.color};">${phase.phase} <span style="color:var(--muted);font-weight:400;">· ${phase.label}</span></div>
-          <div class="refs-phase-sub">${phase.techs.map(t=>t.name).join(' · ')}</div>
+    if(refsEditMode){
+      sec.innerHTML=`
+        <div class="refs-phase-hdr" style="cursor:default;">
+          <div style="flex:1;">
+            <div class="refs-phase-title" style="color:${phase.color};">${phase.phase} <span style="color:var(--muted);font-weight:400;">· ${phase.label}</span></div>
+            <div class="refs-phase-sub">${(phase.techs||[]).map(t=>t.name).join(' · ')||'Sem tecnologias'}</div>
+          </div>
+          <div style="display:flex;gap:4px;">
+            <button class="refs-edit-btn" onclick="openPhaseForm(${pi})" title="Editar categoria">✏</button>
+            <button class="refs-del-btn" onclick="deletePhase(${pi})" title="Excluir categoria">✕</button>
+          </div>
         </div>
-        <span class="refs-phase-chevron" id="rpc_${pi}">▼</span>
-      </div>
-      <div class="refs-phase-body" id="rpb_${pi}">
-        <div class="refs-goal">${phase.goal}</div>
-        ${phase.techs.map((tech,ti)=>`
-          <div class="refs-tech">
-            <div class="refs-tech-hdr" onclick="toggleRefsTech(${pi},${ti})">
-              <span class="refs-tech-icon">${tech.icon}</span>
-              <span class="refs-tech-name">${tech.name}</span>
-              <span class="refs-tech-slot">${tech.slot}</span>
-              <span class="refs-tech-chevron" id="rtc_${pi}_${ti}">›</span>
-            </div>
-            <div class="refs-links" id="rtl_${pi}_${ti}">
-              ${tech.links.map(l=>`
-                <a class="refs-link" href="${l.url}" target="_blank" rel="noopener">
-                  <div class="refs-link-info">
-                    <div class="refs-link-name">${l.name}</div>
-                    <div class="refs-link-meta">${l.author} · ${l.type} · ${l.lang}</div>
-                  </div>
-                  <span class="refs-link-badge ${l.free?'badge-free':'badge-paid'}">${l.free?'Grátis':'Pago'}</span>
-                  <span class="refs-link-arrow">↗</span>
-                </a>`).join('')}
-            </div>
-          </div>`).join('')}
-      </div>`;
+        <div class="refs-phase-body open">
+          ${phase.goal?`<div class="refs-goal">${phase.goal}</div>`:''}
+          ${(phase.techs||[]).map((tech,ti)=>`
+            <div class="refs-tech">
+              <div class="refs-tech-hdr" style="cursor:default;">
+                <span class="refs-tech-icon">${tech.icon}</span>
+                <span class="refs-tech-name">${tech.name}</span>
+                <span class="refs-tech-slot" style="flex:1;">${tech.slot}</span>
+                <button class="refs-edit-btn" onclick="openTechForm(${pi},${ti})" title="Editar">✏</button>
+                <button class="refs-del-btn" onclick="deleteTech(${pi},${ti})" title="Excluir">✕</button>
+              </div>
+              <div class="refs-links open">
+                ${(tech.links||[]).map((l,li)=>`
+                  <div class="refs-link" style="cursor:default;">
+                    <div class="refs-link-info">
+                      <div class="refs-link-name">${l.name}</div>
+                      <div class="refs-link-meta">${l.author} · ${l.type} · ${l.lang}</div>
+                    </div>
+                    <span class="refs-link-badge ${l.free?'badge-free':'badge-paid'}">${l.free?'Grátis':'Pago'}</span>
+                    <button class="refs-edit-btn" onclick="openLinkForm(${pi},${ti},${li})" title="Editar">✏</button>
+                    <button class="refs-del-btn" onclick="deleteLink(${pi},${ti},${li})" title="Excluir">✕</button>
+                  </div>`).join('')}
+                <div style="padding:6px 16px 8px;">
+                  <button class="refs-add-btn" onclick="openLinkForm(${pi},${ti})">+ Material</button>
+                </div>
+              </div>
+            </div>`).join('')}
+          <div style="padding:8px 16px 10px;">
+            <button class="refs-add-btn" onclick="openTechForm(${pi})">+ Tecnologia</button>
+          </div>
+        </div>`;
+    } else {
+      sec.innerHTML=`
+        <div class="refs-phase-hdr" onclick="toggleRefsPhase(${pi})">
+          <div>
+            <div class="refs-phase-title" style="color:${phase.color};">${phase.phase} <span style="color:var(--muted);font-weight:400;">· ${phase.label}</span></div>
+            <div class="refs-phase-sub">${(phase.techs||[]).map(t=>t.name).join(' · ')}</div>
+          </div>
+          <span class="refs-phase-chevron" id="rpc_${pi}">▼</span>
+        </div>
+        <div class="refs-phase-body" id="rpb_${pi}">
+          ${phase.goal?`<div class="refs-goal">${phase.goal}</div>`:''}
+          ${(phase.techs||[]).map((tech,ti)=>`
+            <div class="refs-tech">
+              <div class="refs-tech-hdr" onclick="toggleRefsTech(${pi},${ti})">
+                <span class="refs-tech-icon">${tech.icon}</span>
+                <span class="refs-tech-name">${tech.name}</span>
+                <span class="refs-tech-slot">${tech.slot}</span>
+                <span class="refs-tech-chevron" id="rtc_${pi}_${ti}">›</span>
+              </div>
+              <div class="refs-links" id="rtl_${pi}_${ti}">
+                ${(tech.links||[]).map(l=>`
+                  <a class="refs-link" href="${l.url}" target="_blank" rel="noopener">
+                    <div class="refs-link-info">
+                      <div class="refs-link-name">${l.name}</div>
+                      <div class="refs-link-meta">${l.author} · ${l.type} · ${l.lang}</div>
+                    </div>
+                    <span class="refs-link-badge ${l.free?'badge-free':'badge-paid'}">${l.free?'Grátis':'Pago'}</span>
+                    <span class="refs-link-arrow">↗</span>
+                  </a>`).join('')}
+              </div>
+            </div>`).join('')}
+        </div>`;
+    }
     body.appendChild(sec);
   });
 }
@@ -1490,6 +1782,7 @@ window.addEventListener('resize',()=>{applyLayout();if(currentView==='editor')re
 (async()=>{
   await loadAll();
   await loadBooks();
+  await loadRefs();
   snapshotWeek();
   await saveHistory();
   applyLayout();
