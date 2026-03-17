@@ -465,7 +465,10 @@ let drums={};
 // ═══ HELPERS ═══
 const clone=o=>JSON.parse(JSON.stringify(o));
 const todayIdx=()=>{const d=new Date().getDay();return d===0?6:d-1;};
-function getMondayKey(offset=0){const n=new Date();n.setDate(n.getDate()-((n.getDay()+6)%7)+offset*7);return n.toISOString().slice(0,10);}
+const y = n.getFullYear();
+const m = String(n.getMonth()+1).padStart(2,'0');
+const d = String(n.getDate()).padStart(2,'0');
+return `${y}-${m}-${d}`; // usa a data local do dispositivo
 function weekLabel(mon){const m=new Date(mon+'T12:00:00'),s=new Date(m);s.setDate(m.getDate()+6);const f=d=>d.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'});return f(m)+' – '+f(s);}
 function gradeOf(score10){
   if(score10>=9)return{label:'S',cls:'gs',color:'var(--green)'};
