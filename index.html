@@ -3,7 +3,9 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#0c0c10"/>
 <title>Rotina</title>
+<link rel="manifest" href="/manifest.json"/>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
 :root{
@@ -263,7 +265,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
 .refs-tabs{display:flex;gap:0;}
 .refs-tab{font-family:var(--mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:8px 16px;border:none;background:transparent;color:var(--muted2);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;}
 .refs-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
-.refs-panel{display:none;flex:1;overflow-y:auto;flex-direction:column;}
+.refs-panel{display:none;flex:1;min-height:0;overflow-y:auto;flex-direction:column;}
 .refs-panel.active{display:flex;}
 
 /* ═══ LIVROS ═══ */
@@ -272,7 +274,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
 .books-filters::-webkit-scrollbar{display:none;}
 .bfilter{font-family:var(--mono);font-size:9px;letter-spacing:1px;padding:4px 10px;border-radius:20px;border:1px solid var(--b1);background:transparent;color:var(--muted2);cursor:pointer;white-space:nowrap;transition:all .15s;}
 .bfilter.active{border-color:var(--accent);color:var(--accent);background:rgba(232,197,71,.08);}
-.books-list{flex:1;overflow-y:auto;padding:12px 16px 24px;display:flex;flex-direction:column;gap:8px;}
+.books-list{flex:1;overflow-y:auto;min-height:0;padding:12px 16px 24px;display:block;}
+.books-list>*+*{margin-top:8px;}
 .book-card{border:1px solid var(--b1);border-radius:10px;background:var(--s1);padding:12px 14px;display:flex;gap:12px;align-items:flex-start;}
 .book-status-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px;}
 .book-info{flex:1;min-width:0;}
@@ -287,6 +290,73 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
 .book-act-btn:hover{background:var(--b2);color:var(--text);}
 .book-act-btn.del:hover{background:rgba(224,90,90,.15);color:var(--danger);}
 .books-empty{text-align:center;padding:48px 16px;font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:1px;line-height:2;}
+/* ═══ ESTUDOS ═══ */
+#view-studies{flex-direction:column;overflow:hidden;}
+.studies-header{padding:16px 16px 12px;flex-shrink:0;border-bottom:1px solid var(--b1);}
+.studies-title{font-family:var(--mono);font-size:15px;font-weight:700;}
+.studies-sub{font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-top:3px;}
+.studies-back{font-family:var(--mono);font-size:9px;color:var(--accent);background:none;border:none;cursor:pointer;padding:0;letter-spacing:1px;margin-bottom:6px;display:flex;align-items:center;gap:4px;}
+.studies-body{flex:1;overflow-y:auto;min-height:0;padding:14px 16px 24px;display:block;}
+.studies-body>*+*{margin-top:10px;}
+.studies-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.subj-card-wrap{position:relative;display:flex;}
+.subj-card{border:1px solid var(--b1);border-radius:10px;background:var(--s1);padding:10px 12px 9px;cursor:pointer;transition:all .15s;display:flex;flex-direction:column;gap:6px;flex:1;}
+.subj-card:active{transform:scale(.97);}
+.subj-card:hover{border-color:var(--b2);}
+.subj-card-top{display:flex;align-items:center;gap:8px;}
+.subj-icon{font-size:18px;flex-shrink:0;}
+.subj-name{font-family:var(--mono);font-size:10px;font-weight:700;color:var(--text);}
+.subj-lvl{font-family:var(--mono);font-size:8px;margin-top:1px;}
+.subj-prog-wrap{height:3px;background:var(--b2);border-radius:2px;}
+.subj-prog-fill{height:100%;border-radius:2px;transition:width .5s;}
+.subj-prog-label{font-family:var(--mono);font-size:8px;color:var(--muted);}
+.subj-del-ext{position:absolute;top:-7px;right:-7px;width:20px;height:20px;border-radius:50%;border:1px solid var(--b2);background:var(--bg);color:var(--muted);font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;line-height:1;z-index:2;}
+.subj-del-ext:hover{background:var(--danger);border-color:var(--danger);color:#fff;}
+.lvl-tabs{display:flex;border-bottom:1px solid var(--b1);background:var(--s2);}
+.lvl-tab{flex:1;font-family:var(--mono);font-size:9px;letter-spacing:1px;text-transform:uppercase;padding:8px 0;border:none;background:transparent;color:var(--muted2);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;}
+.lvl-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+.lvl-tab-panel{display:none;flex-direction:column;}
+.lvl-tab-panel.active{display:flex;}
+.lvl-content{padding:14px 16px;display:flex;flex-direction:column;gap:14px;}
+.lvl-content-desc{font-size:12px;color:var(--text);line-height:1.7;}
+.lvl-content-resources{display:flex;flex-direction:column;gap:6px;}
+.lvl-content-res-title{font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:2px;}
+.lvl-content-res-link{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:8px;border:1px solid var(--b1);background:var(--s1);text-decoration:none;transition:background .1s;}
+.lvl-content-res-link:hover{background:var(--b1);}
+.lvl-content-res-name{font-size:12px;color:var(--text);flex:1;}
+.lvl-content-res-arrow{font-size:11px;color:var(--muted);}
+.lvl-challenges{padding:10px 14px;display:flex;flex-direction:column;gap:8px;}
+.lvl-challenge{display:flex;gap:10px;padding:10px 12px;border-radius:8px;border:1px solid var(--b1);background:var(--s1);}
+.lvl-challenge-num{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--accent);flex-shrink:0;width:18px;}
+.lvl-challenge-text{font-size:12px;color:var(--text);line-height:1.6;}
+.lvl-no-content{padding:20px 16px;font-family:var(--mono);font-size:10px;color:var(--muted);text-align:center;letter-spacing:1px;}
+.lvl-legend{display:flex;gap:12px;padding:10px 0 2px;flex-wrap:wrap;}
+.lvl-legend-item{display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:9px;color:var(--muted);}
+.lvl-legend-dot{width:8px;height:8px;border-radius:50%;}
+.lvl-card{border:1px solid var(--b1);border-radius:10px;overflow:hidden;}
+.lvl-card-hdr{display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer;transition:background .1s;}
+.lvl-card-hdr:hover{background:rgba(255,255,255,.02);}
+.lvl-num{font-family:var(--mono);font-size:18px;font-weight:700;line-height:1;width:28px;flex-shrink:0;text-align:center;}
+.lvl-info{flex:1;}
+.lvl-title{font-size:13px;font-weight:500;color:var(--text);}
+.lvl-meta{font-family:var(--mono);font-size:9px;color:var(--muted);margin-top:2px;}
+.lvl-badge{font-family:var(--mono);font-size:8px;padding:2px 8px;border-radius:10px;flex-shrink:0;}
+.lvl-chevron{font-size:12px;color:var(--muted);transition:transform .2s;flex-shrink:0;}
+.lvl-items{display:none;flex-direction:column;border-top:1px solid var(--b1);}
+.lvl-items.open{display:flex;}
+.lvl-item{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border-bottom:1px solid var(--b1);cursor:pointer;transition:background .1s;user-select:none;}
+.lvl-item:last-child{border-bottom:none;}
+.lvl-item:hover{background:rgba(255,255,255,.02);}
+.lvl-item.done{opacity:.5;}
+.lvl-item-chk{width:18px;height:18px;border-radius:5px;border:1.5px solid var(--b2);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s;margin-top:1px;}
+.lvl-item.done .lvl-item-chk{background:var(--green);border-color:var(--green);}
+.lvl-item-label{flex:1;font-size:12px;color:var(--text);line-height:1.5;word-break:break-word;padding-top:1px;}
+.lvl-item.done .lvl-item-label{text-decoration:line-through;color:var(--muted);}
+.lvl-complete-badge{display:none;align-items:center;gap:6px;padding:8px 14px;background:rgba(168,224,90,.06);border-top:1px solid rgba(168,224,90,.15);font-family:var(--mono);font-size:9px;color:var(--green);}
+.lvl-complete-badge.show{display:flex;}
+.lvl-card.completed{border-color:rgba(168,224,90,.25);}
+.lvl-card.completed .lvl-card-hdr{background:rgba(168,224,90,.04);}
+
 .refs-plano-toolbar{display:flex;align-items:center;gap:8px;padding:10px 16px;border-bottom:1px solid var(--b1);flex-shrink:0;}
 .refs-plano-toolbar .btn{margin-left:auto;}
 .refs-plano-toolbar .btn+.btn{margin-left:0;}
@@ -327,6 +397,17 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
 .badge-paid{background:rgba(122,180,255,.12);color:var(--blue);}
 .refs-link-arrow{font-size:12px;color:var(--muted);}
 .refs-goal{padding:10px 16px;font-family:var(--mono);font-size:9px;color:var(--muted);line-height:1.6;border-top:1px solid var(--b1);background:var(--s2);}
+.lvl-content-panel{padding:12px 14px;border-bottom:1px solid var(--b1);background:rgba(255,255,255,.01);}
+.lvl-content-desc{font-size:12px;color:var(--text);line-height:1.7;margin-bottom:10px;}
+.lvl-content-section{margin-bottom:10px;}
+.lvl-content-section:last-child{margin-bottom:0;}
+.lvl-content-section-title{font-family:var(--mono);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+.lvl-content-link{display:flex;align-items:center;gap:8px;padding:5px 0;text-decoration:none;color:var(--blue);font-size:11px;transition:color .1s;}
+.lvl-content-link:hover{color:var(--accent);}
+.lvl-content-link::before{content:'↗';font-size:10px;color:var(--muted);flex-shrink:0;}
+.lvl-challenge-list{list-style:none;display:flex;flex-direction:column;gap:5px;margin:0;padding:0;}
+.lvl-challenge-item{font-size:11px;color:var(--text);padding:7px 10px;background:rgba(232,197,71,.05);border-left:2px solid var(--accent);border-radius:0 6px 6px 0;line-height:1.5;}
+.lvl-items-sep{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--muted);padding:7px 14px;background:var(--s2);border-bottom:1px solid var(--b1);text-transform:uppercase;}
 
 /* DESKTOP */
 @media(min-width:680px){
@@ -438,6 +519,14 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
         <div class="books-list" id="booksList"></div>
       </div>
     </div>
+    <!-- ⑤ ESTUDOS -->
+    <div class="view" id="view-studies">
+      <div class="studies-header" id="studiesHeader">
+        <div class="studies-title">Estudos</div>
+        <div class="studies-sub">Seleciona uma área para estudar</div>
+      </div>
+      <div class="studies-body" id="studiesBody"></div>
+    </div>
   </div>
 
   <nav class="bottom-nav">
@@ -448,6 +537,10 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
     <button class="bnav-btn" id="bn-history" onclick="switchView('history',this)">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
       Histórico
+    </button>
+    <button class="bnav-btn" id="bn-studies" onclick="switchView('studies',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+      Estudos
     </button>
     <button class="bnav-btn" id="bn-refs" onclick="switchView('refs',this)">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
@@ -573,6 +666,59 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
       <div style="display:flex;gap:8px;margin-top:4px;">
         <button class="btn btn-primary" style="flex:1;" onclick="saveLink()">Salvar</button>
         <button class="btn" onclick="closeLinkModal()" style="flex:1;">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SUBJECT FORM MODAL -->
+<div class="modal-overlay" id="subjectModal" onclick="closeSubjectModal(event)">
+  <div class="modal-sheet" style="padding:0 0 16px;">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Nova área de estudo</div>
+    <div style="padding:0 16px;display:flex;flex-direction:column;gap:10px;">
+      <div style="display:flex;gap:8px;">
+        <button class="ifield-icon-btn" id="sfIconBtn" onclick="openIconModal(-1,'subj')" style="flex-shrink:0;">📌</button>
+        <input class="ifield" id="sfName" type="text" placeholder="Nome (ex: TypeScript)" style="flex:1;"/>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:4px;">
+        <button class="btn btn-primary" style="flex:1;" onclick="saveSubjectForm()">Criar área</button>
+        <button class="btn" onclick="closeSubjectModal()" style="flex:1;">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LEVEL FORM MODAL -->
+<div class="modal-overlay" id="lvlFormModal" onclick="closeLvlFormModal(event)">
+  <div class="modal-sheet" style="padding:0 0 16px;">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="lvlFormTitle">Novo nível</div>
+    <div style="padding:0 16px;display:flex;flex-direction:column;gap:10px;">
+      <input class="ifield" id="lfTitle" type="text" placeholder="Título do nível (ex: Fundamentos)" style="width:100%;"/>
+      <select class="ifield" id="lfTier" style="width:100%;">
+        <option value="basico">🔴 Básico</option>
+        <option value="intermediario">🟡 Intermediário</option>
+        <option value="avancado">🟢 Avançado</option>
+      </select>
+      <div style="display:flex;gap:8px;margin-top:4px;">
+        <button class="btn btn-primary" style="flex:1;" onclick="saveLvlForm()">Salvar</button>
+        <button class="btn" onclick="closeLvlFormModal()" style="flex:1;">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ITEM FORM MODAL -->
+<div class="modal-overlay" id="itemFormModal" onclick="closeItemFormModal(event)">
+  <div class="modal-sheet" style="padding:0 0 16px;">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Novo item</div>
+    <div style="padding:0 16px;display:flex;flex-direction:column;gap:10px;">
+      <input class="ifield" id="ifTitle" type="text" placeholder="Descrição do item" style="width:100%;"/>
+      <div style="display:flex;gap:8px;margin-top:4px;">
+        <button class="btn btn-primary" style="flex:1;" onclick="saveItemForm()">Salvar</button>
+        <button class="btn" onclick="closeItemFormModal()" style="flex:1;">Cancelar</button>
       </div>
     </div>
   </div>
@@ -1214,6 +1360,7 @@ function openIconModal(idx,mode){
   const currentIcon=
     mode==='task'?pending[activeCmsDay][idx].icon:
     mode==='tech'?(document.getElementById('tfIconBtn')||{}).textContent||'':
+    mode==='subj'?(document.getElementById('sfIconBtn')||{}).textContent||'':
     (document.getElementById('newIconBtn')||{}).textContent||'';
   grid.innerHTML='';
   ICONS.forEach(em=>{
@@ -1232,6 +1379,9 @@ function selectIcon(em){
     renderEditorTasks(activeCmsDay);
   } else if(mode==='tech'){
     const btn=document.getElementById('tfIconBtn');
+    if(btn)btn.textContent=em;
+  } else if(mode==='subj'){
+    const btn=document.getElementById('sfIconBtn');
     if(btn)btn.textContent=em;
   } else {
     const btn=document.getElementById('newIconBtn');
@@ -1304,7 +1454,1323 @@ function confirmTime(){
 }
 function closeTimeModal(e){if(e.target===document.getElementById('timeModal'))document.getElementById('timeModal').classList.remove('open');}
 
-// ═══ LIVROS ═══
+// ═══ ESTUDOS ═══
+const TIER={
+  basico:{label:'Básico',color:'var(--danger)',bg:'rgba(224,90,90,.12)'},
+  intermediario:{label:'Intermediário',color:'var(--accent)',bg:'rgba(232,197,71,.12)'},
+  avancado:{label:'Avançado',color:'var(--green)',bg:'rgba(168,224,90,.12)'},
+};
+
+const DEFAULT_SUBJECTS=[
+  {id:'javascript',icon:'🟨',name:'JavaScript',levels:[
+    {num:1,tier:'basico',title:'Fundamentos',items:[
+      {id:'js_1_1',title:'Variáveis: var, let, const'},
+      {id:'js_1_2',title:'Tipos de dados e typeof'},
+      {id:'js_1_3',title:'Operadores e condicionais'},
+      {id:'js_1_4',title:'Loops: for, while, forEach'},
+      {id:'js_1_5',title:'Funções e escopo'},
+    ]},
+    {num:2,tier:'basico',title:'Arrays e Objetos',items:[
+      {id:'js_2_1',title:'Métodos de array: map, filter, reduce'},
+      {id:'js_2_2',title:'Desestruturação'},
+      {id:'js_2_3',title:'Spread e rest operator'},
+      {id:'js_2_4',title:'JSON: parse e stringify'},
+    ]},
+    {num:3,tier:'intermediario',title:'DOM e Eventos',items:[
+      {id:'js_3_1',title:'Selecionar e manipular elementos'},
+      {id:'js_3_2',title:'addEventListener e event.target'},
+      {id:'js_3_3',title:'Criar e remover elementos dinamicamente'},
+      {id:'js_3_4',title:'classList: add, remove, toggle'},
+    ]},
+    {num:4,tier:'intermediario',title:'Async e Fetch',items:[
+      {id:'js_4_1',title:'Promises: then, catch, finally'},
+      {id:'js_4_2',title:'async / await'},
+      {id:'js_4_3',title:'fetch API e tratamento de erros'},
+      {id:'js_4_4',title:'JSON de APIs REST'},
+    ]},
+    {num:5,tier:'avancado',title:'ES6+ Moderno',items:[
+      {id:'js_5_1',title:'Módulos: import / export'},
+      {id:'js_5_2',title:'Classes e herança'},
+      {id:'js_5_3',title:'Symbols, WeakMap, Set'},
+      {id:'js_5_4',title:'Generators e Iterators'},
+    ]},
+    {num:6,tier:'avancado',title:'Padrões e Performance',items:[
+      {id:'js_6_1',title:'Closures e currying'},
+      {id:'js_6_2',title:'Debounce e throttle'},
+      {id:'js_6_3',title:'Event delegation'},
+      {id:'js_6_4',title:'Web APIs: localStorage, IntersectionObserver'},
+    ]},
+  ]},
+  {id:'css',icon:'🎨',name:'CSS',levels:[
+    {num:1,tier:'basico',title:'Box Model e Seletores',items:[
+      {id:'css_1_1',title:'margin, padding, border, box-sizing'},
+      {id:'css_1_2',title:'Seletores: classe, id, descendente'},
+      {id:'css_1_3',title:'Pseudo-classes: hover, focus, nth-child'},
+      {id:'css_1_4',title:'Unidades: px, %, em, rem, vw, vh'},
+    ]},
+    {num:2,tier:'basico',title:'Flexbox',items:[
+      {id:'css_2_1',title:'display:flex e flex-direction'},
+      {id:'css_2_2',title:'justify-content e align-items'},
+      {id:'css_2_3',title:'flex-wrap, gap, order'},
+      {id:'css_2_4',title:'flex-grow, flex-shrink, flex-basis'},
+    ]},
+    {num:3,tier:'intermediario',title:'Grid',items:[
+      {id:'css_3_1',title:'grid-template-columns e rows'},
+      {id:'css_3_2',title:'grid-area e template-areas'},
+      {id:'css_3_3',title:'auto-fill, auto-fit e minmax'},
+      {id:'css_3_4',title:'Grid + Flexbox juntos'},
+    ]},
+    {num:4,tier:'intermediario',title:'Responsivo e Variáveis',items:[
+      {id:'css_4_1',title:'Media queries e breakpoints'},
+      {id:'css_4_2',title:'CSS Custom Properties (--vars)'},
+      {id:'css_4_3',title:'clamp(), min(), max()'},
+      {id:'css_4_4',title:'Mobile-first vs desktop-first'},
+    ]},
+    {num:5,tier:'avancado',title:'Animações',items:[
+      {id:'css_5_1',title:'transition e timing functions'},
+      {id:'css_5_2',title:'@keyframes e animation'},
+      {id:'css_5_3',title:'transform: translate, scale, rotate'},
+      {id:'css_5_4',title:'will-change e performance'},
+    ]},
+  ]},
+  {id:'sql',icon:'🗃️',name:'SQL',levels:[
+    {num:1,tier:'basico',title:'Consultas básicas',items:[
+      {id:'sql_1_1',title:'SELECT, FROM, WHERE'},
+      {id:'sql_1_2',title:'ORDER BY, LIMIT, OFFSET'},
+      {id:'sql_1_3',title:'Operadores: AND, OR, IN, BETWEEN, LIKE'},
+      {id:'sql_1_4',title:'Funções: COUNT, SUM, AVG, MAX, MIN'},
+    ]},
+    {num:2,tier:'basico',title:'Joins',items:[
+      {id:'sql_2_1',title:'INNER JOIN'},
+      {id:'sql_2_2',title:'LEFT JOIN e RIGHT JOIN'},
+      {id:'sql_2_3',title:'Joins múltiplos'},
+      {id:'sql_2_4',title:'Aliases de tabelas'},
+    ]},
+    {num:3,tier:'intermediario',title:'Agrupamento e Filtros',items:[
+      {id:'sql_3_1',title:'GROUP BY e HAVING'},
+      {id:'sql_3_2',title:'Subqueries no WHERE e FROM'},
+      {id:'sql_3_3',title:'CASE WHEN THEN END'},
+      {id:'sql_3_4',title:'COALESCE e NULLIF'},
+    ]},
+    {num:4,tier:'intermediario',title:'CTEs e Datas',items:[
+      {id:'sql_4_1',title:'WITH (Common Table Expressions)'},
+      {id:'sql_4_2',title:'Funções de data: DATE_DIFF, DATE_TRUNC, strftime'},
+      {id:'sql_4_3',title:'CREATE VIEW'},
+      {id:'sql_4_4',title:'Índices: quando e por que usar'},
+    ]},
+    {num:5,tier:'avancado',title:'Window Functions',items:[
+      {id:'sql_5_1',title:'ROW_NUMBER, RANK, DENSE_RANK'},
+      {id:'sql_5_2',title:'LAG e LEAD'},
+      {id:'sql_5_3',title:'SUM/AVG OVER PARTITION BY'},
+      {id:'sql_5_4',title:'FIRST_VALUE e LAST_VALUE'},
+    ]},
+  ]},
+  {id:'html',icon:'🌐',name:'HTML',levels:[
+    {num:1,tier:'basico',title:'Estrutura e Semântica',items:[
+      {id:'html_1_1',title:'Estrutura: html, head, body, meta'},
+      {id:'html_1_2',title:'Tags semânticas: header, nav, main, section, footer'},
+      {id:'html_1_3',title:'Headings, p, span, div'},
+      {id:'html_1_4',title:'Links, imagens e atributos'},
+      {id:'html_1_5',title:'Listas: ul, ol, li'},
+      {id:'html_1_6',title:'Tabelas: table, thead, tbody, tr, td'},
+    ]},
+    {num:2,tier:'intermediario',title:'Formulários e Inputs',items:[
+      {id:'html_2_1',title:'input types: text, email, number, date'},
+      {id:'html_2_2',title:'select, textarea, checkbox, radio'},
+      {id:'html_2_3',title:'label, placeholder, required, pattern'},
+      {id:'html_2_4',title:'Acessibilidade: aria-label, role'},
+      {id:'html_2_5',title:'Meta tags SEO: title, description, og:image'},
+    ]},
+    {num:3,tier:'avancado',title:'Web APIs e Recursos',items:[
+      {id:'html_3_1',title:'data-* attributes'},
+      {id:'html_3_2',title:'dialog e details/summary'},
+      {id:'html_3_3',title:'picture e srcset para imagens responsivas'},
+      {id:'html_3_4',title:'manifest.json e meta tags para PWA'},
+    ]},
+  ]},
+  {id:'python',icon:'🐍',name:'Python',levels:[
+    {num:1,tier:'basico',title:'Fundamentos',items:[
+      {id:'py_1_1',title:'Variáveis, tipos e operadores'},
+      {id:'py_1_2',title:'Listas, tuplas, dicionários, sets'},
+      {id:'py_1_3',title:'Condicionais e loops'},
+      {id:'py_1_4',title:'Funções e parâmetros'},
+      {id:'py_1_5',title:'Leitura e escrita de arquivos'},
+    ]},
+    {num:2,tier:'basico',title:'Pandas — Básico',items:[
+      {id:'py_2_1',title:'Ler CSV e Excel com pd.read_csv'},
+      {id:'py_2_2',title:'Selecionar colunas e filtrar linhas'},
+      {id:'py_2_3',title:'groupby e agg'},
+      {id:'py_2_4',title:'Tratar valores nulos'},
+    ]},
+    {num:3,tier:'intermediario',title:'Pandas — Análise',items:[
+      {id:'py_3_1',title:'merge e join entre DataFrames'},
+      {id:'py_3_2',title:'pivot_table'},
+      {id:'py_3_3',title:'apply e lambda'},
+      {id:'py_3_4',title:'Exportar para CSV e Excel'},
+    ]},
+    {num:4,tier:'intermediario',title:'Visualização',items:[
+      {id:'py_4_1',title:'matplotlib: gráficos básicos'},
+      {id:'py_4_2',title:'Plotly: gráficos interativos'},
+      {id:'py_4_3',title:'Gerar relatório HTML com Plotly'},
+      {id:'py_4_4',title:'Dashboard simples com Dash'},
+    ]},
+    {num:5,tier:'avancado',title:'Automações',items:[
+      {id:'py_5_1',title:'requests: consumir APIs'},
+      {id:'py_5_2',title:'DuckDB com Python'},
+      {id:'py_5_3',title:'Automatizar relatórios com agendamento'},
+      {id:'py_5_4',title:'Enviar relatório por email via Python'},
+    ]},
+  ]},
+  {id:'cloudflare',icon:'☁️',name:'Cloudflare',levels:[
+    {num:1,tier:'basico',title:'Pages e DNS',items:[
+      {id:'cf_1_1',title:'Deploy de site estático no Pages'},
+      {id:'cf_1_2',title:'Configurar domínio customizado'},
+      {id:'cf_1_3',title:'Registros DNS: A, CNAME, TXT'},
+      {id:'cf_1_4',title:'Proxy laranja vs cinza'},
+    ]},
+    {num:2,tier:'intermediario',title:'Workers',items:[
+      {id:'cf_2_1',title:'Criar e deployar um Worker'},
+      {id:'cf_2_2',title:'Request, Response e headers'},
+      {id:'cf_2_3',title:'Workers Routes e Environment Variables'},
+      {id:'cf_2_4',title:'KV Namespace: get e set'},
+    ]},
+    {num:3,tier:'intermediario',title:'D1 e R2',items:[
+      {id:'cf_3_1',title:'Criar banco D1 e vincular ao Worker'},
+      {id:'cf_3_2',title:'SQL via D1: SELECT, INSERT, UPDATE'},
+      {id:'cf_3_3',title:'R2: upload e acesso a arquivos'},
+      {id:'cf_3_4',title:'Bucket público vs privado no R2'},
+    ]},
+    {num:4,tier:'avancado',title:'Segurança e Cron',items:[
+      {id:'cf_4_1',title:'Zero Trust Access: proteger subdomínios'},
+      {id:'cf_4_2',title:'Cron Triggers no Worker'},
+      {id:'cf_4_3',title:'Rate Limiting e WAF'},
+      {id:'cf_4_4',title:'Zaraz: tracking sem JS no browser'},
+    ]},
+  ]},
+  {id:'php',icon:'🐘',name:'PHP',levels:[
+    {num:1,tier:'basico',title:'Sintaxe fundamental',items:[
+      {id:'php_1_1',title:'Variáveis: $nome, tipos e echo'},
+      {id:'php_1_2',title:'Condicionais: if, else, elseif'},
+      {id:'php_1_3',title:'Loops: foreach, while'},
+      {id:'php_1_4',title:'Funções: declarar, parâmetros e return'},
+      {id:'php_1_5',title:'Arrays associativos: $arr[\'chave\']'},
+      {id:'php_1_6',title:'Misturar PHP com HTML: <?php ?>'},
+    ]},
+    {num:2,tier:'basico',title:'PHP Orientado a Objetos',items:[
+      {id:'php_2_1',title:'Classes, propriedades e métodos'},
+      {id:'php_2_2',title:'Construtor (__construct) e instanciar objetos'},
+      {id:'php_2_3',title:'Herança: extends e sobrescrita de métodos'},
+      {id:'php_2_4',title:'Interfaces e classes abstratas'},
+      {id:'php_2_5',title:'Namespaces, use e autoload via Composer'},
+    ]},
+    {num:3,tier:'intermediario',title:'Laravel — Fundamentos',items:[
+      {id:'php_3_1',title:'Instalar via Composer e estrutura de pastas'},
+      {id:'php_3_2',title:'Rotas: GET, POST, parâmetros e nomes'},
+      {id:'php_3_3',title:'Controllers: criar, retornar view e JSON'},
+      {id:'php_3_4',title:'Blade: @if, @foreach, @extends, @yield, @section'},
+      {id:'php_3_5',title:'Variáveis de ambiente (.env) e config()'},
+    ]},
+    {num:4,tier:'intermediario',title:'Laravel — Eloquent e Banco',items:[
+      {id:'php_4_1',title:'Migrations: criar e modificar tabelas'},
+      {id:'php_4_2',title:'Models e relacionamentos: hasMany, belongsTo, belongsToMany'},
+      {id:'php_4_3',title:'Queries: all(), find(), where(), create(), update()'},
+      {id:'php_4_4',title:'Seeders e Factories para dados de teste'},
+    ]},
+    {num:5,tier:'avancado',title:'Laravel — APIs e Auth',items:[
+      {id:'php_5_1',title:'API Resources e resposta JSON estruturada'},
+      {id:'php_5_2',title:'Autenticação com Sanctum (tokens de API)'},
+      {id:'php_5_3',title:'Middlewares e proteção de rotas'},
+      {id:'php_5_4',title:'Form Requests: validação e autorização'},
+      {id:'php_5_5',title:'Queues, Jobs e eventos assíncronos'},
+    ]},
+  ]},
+  {id:'cubo',icon:'🎲',name:'Cubo Mágico',levels:[
+    {num:1,tier:'basico',title:'Montar a primeira face',items:[
+      {id:'cubo_1_1',title:'Notação: R, L, U, D, F, B e seus inversos'},
+      {id:'cubo_1_2',title:'Cruz branca: montar a cruz na face branca'},
+      {id:'cubo_1_3',title:'Cantos da face branca: completar os quatro cantos'},
+      {id:'cubo_1_4',title:'Segunda camada: encaixar as quatro arestas do meio'},
+    ]},
+    {num:2,tier:'basico',title:'Resolver pelo método de camadas',items:[
+      {id:'cubo_2_1',title:'Cruz amarela: algoritmo OLL da cruz'},
+      {id:'cubo_2_2',title:'Orientar cantos amarelos: algoritmo Sune'},
+      {id:'cubo_2_3',title:'Permutar cantos amarelos: posicionar os quatro cantos'},
+      {id:'cubo_2_4',title:'Permutar arestas amarelas: concluir a face amarela'},
+      {id:'cubo_2_5',title:'Resolver o cubo completo do zero sem consultar guia'},
+    ]},
+    {num:3,tier:'intermediario',title:'Método CFOP — F2L',items:[
+      {id:'cubo_3_1',title:'Cruz branca eficiente: montar em menos de 8 movimentos'},
+      {id:'cubo_3_2',title:'F2L intuitivo: encaixar par canto+aresta junto'},
+      {id:'cubo_3_3',title:'Casos básicos de F2L: os 4 casos mais comuns'},
+      {id:'cubo_3_4',title:'F2L com cubo parcialmente resolvido: prever próximo par'},
+    ]},
+    {num:4,tier:'intermediario',title:'Método CFOP — OLL e PLL',items:[
+      {id:'cubo_4_1',title:'2-Look OLL: 2 algoritmos para orientar face amarela'},
+      {id:'cubo_4_2',title:'2-Look PLL: 4 algoritmos para permutar camada final'},
+      {id:'cubo_4_3',title:'Resolver consistentemente abaixo de 2 minutos'},
+      {id:'cubo_4_4',title:'Reconhecimento de casos OLL e PLL sem hesitação'},
+    ]},
+    {num:5,tier:'avancado',title:'Sub-1 minuto',items:[
+      {id:'cubo_5_1',title:'Full OLL: 57 algoritmos de orientação'},
+      {id:'cubo_5_2',title:'Full PLL: 21 algoritmos de permutação'},
+      {id:'cubo_5_3',title:'Look-ahead: planejar próximo par enquanto executa o atual'},
+      {id:'cubo_5_4',title:'Resolver consistentemente abaixo de 1 minuto'},
+    ]},
+  ]},
+  {id:'gaita',icon:'🎵',name:'Gaita de Boca',levels:[
+    {num:1,tier:'basico',title:'Primeiros sons',items:[
+      {id:'gaita_1_1',title:'Anatomia da gaita: furos, reed plates, cover plates'},
+      {id:'gaita_1_2',title:'Posição da boca: embouchure e canal único'},
+      {id:'gaita_1_3',title:'Notas sopradas (blow) e notas aspiradas (draw)'},
+      {id:'gaita_1_4',title:'Escala de Dó maior: tocar os 10 furos em sequência'},
+      {id:'gaita_1_5',title:'Primeira melodia simples completa do começo ao fim'},
+    ]},
+    {num:2,tier:'basico',title:'Ritmo e articulação',items:[
+      {id:'gaita_2_1',title:'Articulação com língua: ta-ta-ta e doo-doo-doo'},
+      {id:'gaita_2_2',title:'Tocar com metrônomo: manter pulso estável a 60 BPM'},
+      {id:'gaita_2_3',title:'Dinâmica: variação de volume suave e forte'},
+      {id:'gaita_2_4',title:'Três melodias conhecidas do começo ao fim com ritmo'},
+    ]},
+    {num:3,tier:'intermediario',title:'Bending',items:[
+      {id:'gaita_3_1',title:'O que é bending: abaixar a nota puxando o ar'},
+      {id:'gaita_3_2',title:'Primeiro bend: furo 4 draw — nota azul'},
+      {id:'gaita_3_3',title:'Bends nos furos 2, 3 e 6 draw com afinação correta'},
+      {id:'gaita_3_4',title:'Melodia com pelo menos um bend integrado'},
+    ]},
+    {num:4,tier:'intermediario',title:'Blues e improvisação',items:[
+      {id:'gaita_4_1',title:'Escala de blues na gaita diatônica (segunda posição)'},
+      {id:'gaita_4_2',title:'Progressão 12 compassos de blues: tocar junto com playback'},
+      {id:'gaita_4_3',title:'Frasear: pausa, resposta e variação de motivos'},
+      {id:'gaita_4_4',title:'Improvisação livre de 2 minutos sobre backing track de blues'},
+    ]},
+    {num:5,tier:'avancado',title:'Expressão e repertório',items:[
+      {id:'gaita_5_1',title:'Overbend básico: overdraw no furo 6'},
+      {id:'gaita_5_2',title:'Vibrato natural e vibrato de mão'},
+      {id:'gaita_5_3',title:'Repertório de 5 músicas completas com estilo próprio'},
+      {id:'gaita_5_4',title:'Gravar uma performance de 3 minutos e ouvir criticamente'},
+    ]},
+  ]},
+];
+
+const STUDY_CONTENT={
+  javascript_0:{
+    desc:'A base do JavaScript moderno: prefira const e let, evite var. Tipos primitivos, coerção implícita e funções são a base de tudo. Funções são cidadãs de primeira classe — podem ser passadas como argumento e retornadas de outras funções. Escopo e hoisting explicam comportamentos que parecem bugados.',
+    resources:[
+      {name:'javascript.info — Primeiros passos',url:'https://javascript.info/first-steps'},
+      {name:'MDN — Aprendendo JS (PT-BR)',url:'https://developer.mozilla.org/pt-BR/docs/Learn/JavaScript/First_steps'},
+      {name:'Curso em Vídeo — JS (YouTube)',url:'https://www.youtube.com/playlist?list=PLHz_AreHm4dlsK3Nr9GVvXCbpQyHQl1o1'},
+    ],
+    challenges:[
+      'Calculadora via prompt: pergunta dois números e a operação desejada, retorna o resultado tratando divisão por zero',
+      'FizzBuzz: de 1 a 100, imprime Fizz para múltiplos de 3, Buzz para 5, FizzBuzz para ambos',
+      'Função que valida se um CPF tem exatamente 11 dígitos e contém apenas números — retorna true ou false',
+    ]
+  },
+  javascript_1:{
+    desc:'Arrays e objetos carregam dados reais — listas de leads, registros de CRM, respostas de API. Os métodos funcionais (map, filter, reduce) substituem loops manuais e deixam o código mais legível. Desestruturação e spread são indispensáveis no JS moderno e aparecem em todo projeto.',
+    resources:[
+      {name:'javascript.info — Métodos de Array',url:'https://javascript.info/array-methods'},
+      {name:'javascript.info — Desestruturação',url:'https://javascript.info/destructuring-assignment'},
+      {name:'MDN — Array Reference (PT-BR)',url:'https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Array'},
+    ],
+    challenges:[
+      'Dado um array de leads com nome, status e valor: filtra só os convertidos e soma o valor total com reduce',
+      'Recebe um objeto de configuração de webhook e usa desestruturação para extrair campos com valores padrão',
+      'Mescla dois arrays de origens de campanha sem duplicatas usando spread e Set',
+    ]
+  },
+  javascript_2:{
+    desc:'O DOM é a representação da página como árvore de objetos manipulável em tempo real. Eventos conectam ações do usuário a funções. É a base de qualquer interface interativa — formulários, filtros, dashboards. Tudo que foi feito neste app usa exatamente esses conceitos.',
+    resources:[
+      {name:'javascript.info — DOM',url:'https://javascript.info/document'},
+      {name:'javascript.info — Eventos',url:'https://javascript.info/events'},
+      {name:'MDN — Manipulando o DOM (PT-BR)',url:'https://developer.mozilla.org/pt-BR/docs/Learn/JavaScript/Client-side_web_APIs/Manipulating_documents'},
+    ],
+    challenges:[
+      'Lista de tarefas: input para adicionar, clique para marcar como feito com toggle de classe, botão para remover',
+      'Formulário que valida campos em tempo real via evento input — exibe mensagem de erro abaixo de cada campo inválido',
+      'Filtro de tabela de leads: input que filtra linhas pelo nome em tempo real sem recarregar a página',
+    ]
+  },
+  javascript_3:{
+    desc:'A maioria das operações reais são assíncronas — buscar uma API não retorna imediatamente. Promises e async/await são a forma moderna de lidar com isso. fetch() é a API nativa do browser para requisições HTTP. É o que conecta o frontend a qualquer serviço externo — RD Station, CRM, Workers.',
+    resources:[
+      {name:'javascript.info — Async/Await',url:'https://javascript.info/async-await'},
+      {name:'javascript.info — Fetch',url:'https://javascript.info/fetch'},
+      {name:'MDN — Usando Fetch (PT-BR)',url:'https://developer.mozilla.org/pt-BR/docs/Web/API/Fetch_API/Using_Fetch'},
+    ],
+    challenges:[
+      'Consome a API pública ViaCEP — input de CEP, busca ao pressionar Enter, exibe endereço formatado na tela',
+      'Consome JSONPlaceholder e exibe lista de usuários como cards com nome e email gerados dinamicamente no DOM',
+      'Função fetchSafe(url) que retorna os dados em caso de sucesso ou null sem lançar erro — com try/catch interno',
+    ]
+  },
+  javascript_4:{
+    desc:'ES6+ trouxe módulos nativos que dividem código em arquivos reutilizáveis — base de qualquer projeto moderno. Classes adicionam sintaxe orientada a objetos. Esse nível é o que separa quem escreve scripts de quem estrutura aplicações.',
+    resources:[
+      {name:'javascript.info — Módulos',url:'https://javascript.info/modules-intro'},
+      {name:'javascript.info — Classes',url:'https://javascript.info/classes'},
+      {name:'MDN — Classes JS (PT-BR)',url:'https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Classes'},
+    ],
+    challenges:[
+      'Refatora as funções de validação de formulário deste app em um módulo separado e importa no arquivo principal',
+      'Cria uma classe Lead com propriedades nome, email, status e métodos qualificar(score), converter() e toJSON()',
+      'Cria LeadVip que estende Lead com método calcularLTV(ticketMedio, meses) e sobrescreve toJSON() com campos extras',
+    ]
+  },
+  javascript_5:{
+    desc:'Closures permitem criar funções com estado privado — base de padrões como módulo e memoização. Debounce e throttle controlam frequência de execução, essenciais para inputs de busca em tempo real. Event delegation melhora performance em listas longas com um único listener.',
+    resources:[
+      {name:'javascript.info — Closures',url:'https://javascript.info/closure'},
+      {name:'CSS-Tricks — Debounce e Throttle explicados',url:'https://css-tricks.com/debouncing-throttling-explained-examples/'},
+      {name:'javascript.info — Event Delegation',url:'https://javascript.info/event-delegation'},
+    ],
+    challenges:[
+      'Implementa debounce do zero: função que só executa 300ms após a última chamada — aplica num input de busca de leads',
+      'Cache simples com closure: função que memoriza resultado de chamadas de API usando endpoint como chave',
+      'Event delegation numa tabela de 500 linhas: um listener no tbody, identifica a linha clicada via data-id',
+    ]
+  },
+  css_0:{
+    desc:'Todo elemento HTML é uma caixa com conteúdo, padding, border e margin. box-sizing:border-box faz o tamanho total incluir padding e border — use sempre. Seletores bem escritos evitam CSS excessivamente específico que fica difícil de sobrescrever.',
+    resources:[
+      {name:'MDN — Box Model (PT-BR)',url:'https://developer.mozilla.org/pt-BR/docs/Learn/CSS/Building_blocks/The_box_model'},
+      {name:'Curso em Vídeo — HTML5 e CSS3',url:'https://www.youtube.com/playlist?list=PLHz_AreHm4dkZ9-atAiOMQnQkCBYto6GJ'},
+      {name:'Kevin Powell — Box Model',url:'https://www.youtube.com/watch?v=rIO5326FgPE'},
+    ],
+    challenges:[
+      'Recria um card de produto: imagem, título, descrição e preço com espaçamentos corretos usando apenas margin e padding',
+      'Crie um perfil de usuário: avatar circular, nome, bio e 3 estatísticas — sem Flexbox, apenas box model',
+      'Escreva um seletor CSS que afeta apenas o terceiro parágrafo dentro de .content sem adicionar classe no HTML',
+    ]
+  },
+  css_1:{
+    desc:'Flexbox resolve alinhamento em uma dimensão (linha ou coluna). O container controla direção e distribuição; os filhos controlam como crescem e encolhem. É a base de navbars, cards lado a lado e qualquer layout unidimensional.',
+    resources:[
+      {name:'CSS-Tricks — Guia Completo Flexbox',url:'https://css-tricks.com/snippets/css/a-guide-to-flexbox/'},
+      {name:'Flexbox Froggy — jogo interativo (PT-BR)',url:'https://flexboxfroggy.com/#pt-br'},
+      {name:'Kevin Powell — Flexbox',url:'https://www.youtube.com/watch?v=u044iM9xsWU'},
+    ],
+    challenges:[
+      'Navbar responsiva: logo à esquerda, links no centro, botão CTA à direita — tudo com Flexbox, sem position',
+      'Grade de 4 cards de serviço que quebram para 2 colunas no mobile usando flex-wrap + gap',
+      'Rodapé com 3 seções: copyright à esquerda, links no centro, ícones de redes sociais à direita',
+    ]
+  },
+  css_2:{
+    desc:'CSS Grid é para layouts bidimensionais — controla linhas E colunas ao mesmo tempo. Perfeito para dashboards, galerias e estruturas de página. Template areas permitem nomear regiões do layout de forma visual no código.',
+    resources:[
+      {name:'CSS-Tricks — Guia Completo Grid',url:'https://css-tricks.com/snippets/css/complete-guide-grid/'},
+      {name:'Grid Garden — jogo interativo (PT-BR)',url:'https://cssgridgarden.com/#pt-br'},
+      {name:'MDN — CSS Grid Layout (PT-BR)',url:'https://developer.mozilla.org/pt-BR/docs/Web/CSS/CSS_grid_layout'},
+    ],
+    challenges:[
+      'Layout de dashboard: sidebar (200px) à esquerda, header no topo, área principal e rodapé — com template-areas nomeadas',
+      'Galeria de fotos com colunas de tamanhos diferentes usando grid-column: span 2 em algumas imagens',
+      'Recria o layout desta rotina (strip de dias + painel de tarefas) usando Grid com template-areas',
+    ]
+  },
+  css_3:{
+    desc:'Media queries adaptam o layout para diferentes tamanhos de tela. Mobile-first começa pelo menor tamanho e adiciona complexidade. CSS Custom Properties centralizam valores como cores e espaçamentos — base de qualquer sistema de design.',
+    resources:[
+      {name:'MDN — Media Queries (PT-BR)',url:'https://developer.mozilla.org/pt-BR/docs/Web/CSS/CSS_media_queries/Using_media_queries'},
+      {name:'web.dev — Design Responsivo',url:'https://web.dev/responsive-web-design-basics/'},
+      {name:'Kevin Powell — CSS Variables',url:'https://www.youtube.com/watch?v=GF8aoDqebsQ'},
+    ],
+    challenges:[
+      'Converta layout desktop de 3 colunas para 2 colunas no tablet (768px) e 1 coluna no mobile (480px)',
+      'Crie sistema de tema claro/escuro usando CSS Custom Properties — toggle via classe .dark no :root',
+      'Use clamp() para criar título fluido: mínimo 18px no mobile, máximo 36px no desktop — sem media query',
+    ]
+  },
+  css_4:{
+    desc:'Animações bem usadas orientam a atenção e dão feedback de ação. transition anima mudanças de estado acionadas por CSS como hover e focus. @keyframes permite sequências complexas e controláveis com timing preciso.',
+    resources:[
+      {name:'MDN — CSS Transitions (PT-BR)',url:'https://developer.mozilla.org/pt-BR/docs/Web/CSS/CSS_transitions/Using_CSS_transitions'},
+      {name:'MDN — CSS Animations (PT-BR)',url:'https://developer.mozilla.org/pt-BR/docs/Web/CSS/CSS_animations/Using_CSS_animations'},
+      {name:'Kevin Powell — Animations',url:'https://www.youtube.com/watch?v=YszONjKpgg4'},
+    ],
+    challenges:[
+      'Botão com transição suave de cor e sombra no hover + efeito de pressionar (scale .98) no active',
+      'Loading spinner animado com @keyframes usando apenas CSS puro — sem imagem, sem biblioteca',
+      'Notificação toast que desliza da direita com animation, fica 2s visível e some com fade-out',
+    ]
+  },
+  sql_0:{
+    desc:'SQL é declarativo — você descreve o que quer, não como buscar. É a linguagem central de qualquer análise de marketing: contar leads, calcular conversão, identificar top canais. Funções de agregação (COUNT, SUM, AVG) transformam tabelas brutas em métricas úteis.',
+    resources:[
+      {name:'SQLZoo — Tutorial Interativo',url:'https://sqlzoo.net/wiki/SQL_Tutorial'},
+      {name:'Mode SQL Tutorial (EN)',url:'https://mode.com/sql-tutorial/introduction-to-sql/'},
+      {name:'W3Schools SQL (PT adaptado)',url:'https://www.w3schools.com/sql/'},
+    ],
+    challenges:[
+      'Conta leads por status (qualificado, nao_qualificado, convertido) ordenado por contagem decrescente',
+      'Lista os 10 maiores fechamentos do mês com nome do lead, valor e data — ordenados por valor',
+      'Ticket médio, total e maior venda por vendedor — filtra vendedores com mais de 5 vendas usando HAVING',
+    ]
+  },
+  sql_1:{
+    desc:'JOINs combinam tabelas pela chave em comum. INNER JOIN retorna só os registros que existem nos dois lados. LEFT JOIN mantém todos da tabela principal — fundamental para relatórios de integração entre CRM, planilhas e ferramentas de marketing.',
+    resources:[
+      {name:'SQLZoo — JOINs',url:'https://sqlzoo.net/wiki/The_JOIN_operation'},
+      {name:'Visualizador de JOINs',url:'https://joins.spathon.com/'},
+      {name:'Mode — SQL JOINs (EN)',url:'https://mode.com/sql-tutorial/sql-joins/'},
+    ],
+    challenges:[
+      'Cruza leads com conversões pelo email — lista leads que tiveram venda com valor total por lead',
+      'Lista todos os leads que NUNCA geraram venda usando LEFT JOIN + WHERE venda_id IS NULL',
+      'Relatório: nome do lead, vendedor responsável e empresa — cruzando três tabelas em uma query',
+    ]
+  },
+  sql_2:{
+    desc:'GROUP BY é a base de qualquer relatório de funil — agrupa linhas pelo mesmo valor para calcular métricas por categoria. HAVING filtra grupos depois da agregação. CASE WHEN cria colunas calculadas condicionalmente, como o SE do Excel mas dentro do SQL.',
+    resources:[
+      {name:'Mode — GROUP BY (EN)',url:'https://mode.com/sql-tutorial/sql-group-by/'},
+      {name:'Mode — HAVING (EN)',url:'https://mode.com/sql-tutorial/sql-having/'},
+      {name:'SQLZoo — SUM e COUNT',url:'https://sqlzoo.net/wiki/SUM_and_COUNT'},
+    ],
+    challenges:[
+      'Leads por mês de entrada e origem — filtra origens com mais de 10 leads no período usando HAVING',
+      'Taxa de conversão por origem: leads convertidos dividido pelo total usando CASE WHEN ou subquery',
+      'Classifica vendas em faixas de valor (ate_1k, de_1k_a_5k, acima_5k) e conta quantas em cada faixa',
+    ]
+  },
+  sql_3:{
+    desc:'CTEs (WITH) nomeiam subqueries intermediárias tornando SQL complexo legível — essencial para relatórios de funil em múltiplas etapas. Funções de data calculam tempo entre eventos: dias de lead até conversão, agrupamento por semana ou mês, comparação entre períodos.',
+    resources:[
+      {name:'Mode SQL — CTEs com WITH',url:'https://mode.com/sql-tutorial/sql-with-clause/'},
+      {name:'DuckDB — Funções de data',url:'https://duckdb.org/docs/sql/functions/date'},
+      {name:'Mode SQL — Views',url:'https://mode.com/sql-tutorial/sql-views/'},
+    ],
+    challenges:[
+      'Funil com CTEs: CTE1 = total leads, CTE2 = qualificados, CTE3 = convertidos — mostra % de cada etapa',
+      'Tempo médio em dias entre cadastro e conversão por canal de origem usando DATE_DIFF',
+      'View vw_leads_ativos que encapsula filtros de score e status para reusar em múltiplos relatórios',
+    ]
+  },
+  sql_4:{
+    desc:'Window functions calculam sobre conjuntos de linhas sem colapsar como GROUP BY. São a ferramenta mais poderosa do SQL analítico: ranking de vendedores, comparação com mês anterior, acumulado do ano — tudo em um único SELECT.',
+    resources:[
+      {name:'Mode — Window Functions (EN)',url:'https://mode.com/sql-tutorial/sql-window-functions/'},
+      {name:'PostgreSQL — Window Functions',url:'https://www.postgresql.org/docs/current/functions-window.html'},
+      {name:'DuckDB — Window Functions',url:'https://duckdb.org/docs/sql/window_functions.html'},
+    ],
+    challenges:[
+      'ROW_NUMBER() OVER particionado por vendedor para ranquear as maiores vendas de cada um',
+      'LAG() para calcular variação de leads vs mês anterior — total atual e anterior na mesma linha',
+      'SUM() OVER acumulado para gerar total de vendas do ano mês a mês em ordem cronológica',
+    ]
+  },
+  html_0:{
+    desc:'HTML semântico descreve o significado do conteúdo. Tags como header, nav, main e footer ajudam mecanismos de busca, leitores de tela e o próprio CSS seletor. A estrutura correta reduz o CSS necessário e melhora acessibilidade sem esforço extra.',
+    resources:[
+      {name:'MDN — HTML Básico (PT-BR)',url:'https://developer.mozilla.org/pt-BR/docs/Learn/HTML'},
+      {name:'Curso em Vídeo — HTML5',url:'https://www.youtube.com/playlist?list=PLHz_AreHm4dkZ9-atAiOMQnQkCBYto6GJ'},
+      {name:'W3Schools HTML',url:'https://www.w3schools.com/html/'},
+    ],
+    challenges:[
+      'Recria a estrutura de uma página de produto sem CSS — apenas HTML semântico com as tags corretas para cada parte',
+      'Estrutura um artigo de blog: header com título/data/autor, corpo com sections e blockquotes, footer com tags',
+      'Página de portfólio com nav, 3 sections (sobre/projetos/contato) e footer — valida no validator.w3.org',
+    ]
+  },
+  html_1:{
+    desc:'Formulários bem construídos aumentam conversão. O tipo correto de input ativa o teclado certo no mobile. Atributos como required, pattern e min/max validam antes do JS, sem necessidade de código extra.',
+    resources:[
+      {name:'MDN — Formulários Web (PT-BR)',url:'https://developer.mozilla.org/pt-BR/docs/Learn/Forms'},
+      {name:'web.dev — Melhores práticas de forms',url:'https://web.dev/learn/forms/'},
+      {name:'MDN — Tipos de input',url:'https://developer.mozilla.org/pt-BR/docs/Web/HTML/Element/input'},
+    ],
+    challenges:[
+      'Formulário de cadastro de lead: nome, email, telefone (type=tel), empresa, cargo, interesse (select) com validação nativa',
+      'Formulário de filtro de relatório: busca text, select de status, input date de início e fim — sem JS',
+      'Adicione label, aria-label e aria-describedby onde necessário em um formulário existente para melhorar acessibilidade',
+    ]
+  },
+  html_2:{
+    desc:'HTML moderno vai além de tags de texto. data-* attributes guardam dados nos elementos para o JS ler sem DOM parsing extra. dialog cria modais nativas com acessibilidade embutida. manifest.json transforma qualquer site em PWA instalável.',
+    resources:[
+      {name:'MDN — data-* attributes (PT-BR)',url:'https://developer.mozilla.org/pt-BR/docs/Learn/HTML/Howto/Use_data_attributes'},
+      {name:'MDN — elemento dialog',url:'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dialog'},
+      {name:'web.dev — PWA Básico',url:'https://web.dev/progressive-web-apps/'},
+    ],
+    challenges:[
+      'Lista de produtos onde cada item tem data-id, data-preco e data-categoria — filtra por categoria via JS lendo os data-*',
+      'Substitui um modal feito com divs pela tag dialog nativa com showModal(), close() e backdrop customizado via CSS',
+      'Cria manifest.json completo para este app e testa instalação no Android via Chrome',
+    ]
+  },
+  python_0:{
+    desc:'Python tem sintaxe limpa próxima do inglês. Diferente do JS, usa indentação para blocos — não chaves. Listas e dicionários correspondem a arrays e objetos do JS e são as estruturas mais usadas em análise de dados.',
+    resources:[
+      {name:'Automate the Boring Stuff (gratuito online)',url:'https://automatetheboringstuff.com/'},
+      {name:'Curso em Vídeo — Python (YouTube)',url:'https://www.youtube.com/playlist?list=PLHz_AreHm4dlKP6QQCekuIPky1CiwmdI6'},
+      {name:'Python.org Tutorial (PT-BR)',url:'https://docs.python.org/pt-br/3/tutorial/'},
+    ],
+    challenges:[
+      'Lê um arquivo CSV de leads manualmente (sem pandas) e imprime nome/email de quem tem status convertido',
+      'Cria dicionário de métricas de vendas e calcula: total, média, maior e menor valor com as funções nativas',
+      'Script que pede nome e email via input(), valida formato do email com expressão regular e salva em .txt',
+    ]
+  },
+  python_1:{
+    desc:'Pandas é a biblioteca central de análise de dados em Python. Um DataFrame é como uma tabela SQL em memória. A maioria das análises começa com ler um CSV, filtrar colunas e agrupar por categoria — exatamente o workflow de relatórios de marketing.',
+    resources:[
+      {name:'Pandas — Getting Started',url:'https://pandas.pydata.org/docs/getting_started/intro_tutorials/index.html'},
+      {name:'Kaggle — Pandas Course (gratuito)',url:'https://www.kaggle.com/learn/pandas'},
+      {name:'Hashtag Treinamentos — Pandas (YouTube)',url:'https://www.youtube.com/watch?v=N5UzHg6AIWY'},
+    ],
+    challenges:[
+      'Lê export CSV do RD Station, filtra apenas leads MQL, ordena por pontuação e exibe os 10 maiores',
+      'Agrupa leads por origem e conta quantos existem em cada canal — resultado igual a um relatório de mídia',
+      'Encontra e remove linhas com email duplicado mantendo apenas o registro mais recente por data de criação',
+    ]
+  },
+  python_2:{
+    desc:'merge() combina DataFrames como SQL JOIN — fundamental para cruzar leads com fechamentos. pivot_table() gera tabelas dinâmicas como no Excel. apply() com lambda transforma qualquer coluna com lógica customizada sem loop.',
+    resources:[
+      {name:'Pandas — Merging e Joining',url:'https://pandas.pydata.org/docs/user_guide/merging.html'},
+      {name:'Real Python — Pandas merge (EN)',url:'https://realpython.com/pandas-merge-join-and-concatenate/'},
+      {name:'Kaggle — Advanced Pandas (gratuito)',url:'https://www.kaggle.com/learn/pandas'},
+    ],
+    challenges:[
+      'Cruza base de leads com base de fechamentos pelo email — mostra leads que geraram receita com valor total por lead',
+      'pivot_table de conversão: linhas = mês, colunas = origem, valores = count de leads convertidos',
+      'Usa apply() para classificar cada lead em faixa de score: baixo (<30), medio (30-70), alto (>70)',
+    ]
+  },
+  python_3:{
+    desc:'Gráficos transformam dados em decisões. Plotly gera gráficos interativos que exportam para HTML — perfeito para relatórios que hospedas no Cloudflare Pages ou envias por email. Um arquivo HTML com Plotly não precisa de servidor.',
+    resources:[
+      {name:'Plotly Express — Getting Started',url:'https://plotly.com/python/plotly-express/'},
+      {name:'Plotly — Python Library',url:'https://plotly.com/python/'},
+      {name:'Real Python — matplotlib (EN)',url:'https://realpython.com/python-matplotlib-guide/'},
+    ],
+    challenges:[
+      'Funil de vendas interativo com Plotly (leads → MQL → SQL → fechados) a partir de dados CSV reais',
+      'Gráfico de linha com evolução de leads por mês — exporta como HTML independente que abre no browser',
+      'Relatório completo em HTML com 3 gráficos (funil, por origem, evolução mensal) — sem backend, arquivo único',
+    ]
+  },
+  python_4:{
+    desc:'requests consome qualquer API REST em poucas linhas. DuckDB roda SQL diretamente em arquivos CSV e DataFrames sem instalar banco de dados. Combinados, permitem automatizar relatórios complexos e eliminar trabalho manual repetitivo.',
+    resources:[
+      {name:'Requests — Quickstart',url:'https://requests.readthedocs.io/en/latest/user/quickstart/'},
+      {name:'DuckDB — Python API',url:'https://duckdb.org/docs/api/python/overview.html'},
+      {name:'Automate the Boring Stuff — Cap. 18 Email',url:'https://automatetheboringstuff.com/2e/chapter18/'},
+    ],
+    challenges:[
+      'Consome API do RD Station via requests, baixa leads das últimas 2 semanas e salva em CSV local',
+      'Usa DuckDB para rodar SQL em cima de CSV de leads sem banco — GROUP BY origem com filtro de data',
+      'Pipeline completo: busca API → salva CSV → analisa com DuckDB → gera relatório Plotly → envia por email',
+    ]
+  },
+  cubo_0:{
+    desc:'Antes de algoritmos, entenda a notação. R (Right), L (Left), U (Up), D (Down), F (Front), B (Back) — cada letra é uma face. A letra sozinha é 90° no sentido horário, com apóstrofo é anti-horário. Tudo no cubo é descrito com essa linguagem. A cruz branca é o primeiro objetivo real: não precisa de algoritmo, só lógica.',
+    resources:[
+      {name:'J Perm — Beginner Method (YouTube)',url:'https://www.youtube.com/watch?v=7Ron6MN45LY'},
+      {name:'Cubo Mágico BR — Tutorial Iniciante',url:'https://www.youtube.com/watch?v=mO0TIHvfBfQ'},
+      {name:'Ruwix — Notação interativa',url:'https://ruwix.com/the-rubiks-cube/notation/'},
+    ],
+    challenges:[
+      'Aprende a notação e consegue executar qualquer sequência ditada em voz alta sem olhar para as letras',
+      'Monta a cruz branca sem consultar guia — apenas observando as peças e planejando',
+      'Completa a face branca inteira (cruz + 4 cantos) de forma consistente',
+    ]
+  },
+  cubo_1:{
+    desc:'A segunda camada e a face amarela completam o cubo pelo método de camadas (LBL). São 3 ou 4 algoritmos fixos que resolvem qualquer estado possível nessa fase. O objetivo aqui não é velocidade — é resolver o cubo do começo ao fim de forma independente e consistente.',
+    resources:[
+      {name:'J Perm — Como resolver o cubo (PT)',url:'https://www.youtube.com/watch?v=7Ron6MN45LY'},
+      {name:'Badmephisto — Algoritmos LBL',url:'https://badmephisto.com/'},
+      {name:'Rubiks.com — Guia oficial',url:'https://www.rubiks.com/en-us/blogs/learn/how-to-solve-the-rubiks-cube'},
+    ],
+    challenges:[
+      'Encaixa as 4 arestas da segunda camada sem consultar guia',
+      'Completa a face amarela (OLL + PLL) usando os algoritmos memorizados',
+      'Resolve o cubo do zero, do início ao fim, sem consultar nenhum material',
+    ]
+  },
+  cubo_2:{
+    desc:'CFOP começa pela cruz mais eficiente possível — meta é 8 movimentos ou menos. F2L (First Two Layers) resolve as duas primeiras camadas ao mesmo tempo, encaixando pares de canto e aresta juntos. É mais lento para aprender mas muito mais rápido de executar.',
+    resources:[
+      {name:'J Perm — F2L Tutorial Completo',url:'https://www.youtube.com/watch?v=Ar_Zit1VLG4'},
+      {name:'AlgDB — Banco de algoritmos F2L',url:'https://algdb.net/puzzle/333/f2l'},
+      {name:'SpeedSolving Wiki — CFOP',url:'https://www.speedsolving.com/wiki/index.php/CFOP_method'},
+    ],
+    challenges:[
+      'Monta a cruz branca em menos de 8 movimentos de forma consistente',
+      'Resolve F2L intuitivo nos 4 pares sem algoritmo decorado',
+      'Reconhece e executa os 4 casos básicos de F2L sem hesitação',
+    ]
+  },
+  cubo_3:{
+    desc:'2-Look OLL e 2-Look PLL são versões simplificadas do CFOP final — resolvem a camada amarela em 2 algoritmos cada em vez de 57+21. É o equilíbrio certo entre velocidade e quantidade de memorização. Com isso é possível chegar consistentemente abaixo de 2 minutos.',
+    resources:[
+      {name:'J Perm — 2 Look OLL e PLL',url:'https://www.youtube.com/watch?v=GhmYBgLoQQg'},
+      {name:'AlgDB — 2-Look OLL',url:'https://algdb.net/puzzle/333/oll'},
+      {name:'AlgDB — 2-Look PLL',url:'https://algdb.net/puzzle/333/pll'},
+    ],
+    challenges:[
+      'Resolve 2-Look OLL nos 7 casos sem hesitar no reconhecimento',
+      'Resolve 2-Look PLL nos 6 casos com execução fluida',
+      'Solve completo abaixo de 2 minutos de forma consistente (5 solves seguidos)',
+    ]
+  },
+  cubo_4:{
+    desc:'Full OLL e PLL eliminam os dois passos duplos — cada caso vira um único algoritmo. Look-ahead é a habilidade de planejar o próximo par F2L enquanto executa o atual, sem parar para analisar. É o que separa speedcubers de sub-1 minuto dos demais.',
+    resources:[
+      {name:'J Perm — Full PLL Tutorial',url:'https://www.youtube.com/watch?v=f_Yor-ydZjs'},
+      {name:'CubeSkills — Treinamento de look-ahead',url:'https://cubeskills.com/'},
+      {name:'AlgDB — Full OLL 57 casos',url:'https://algdb.net/puzzle/333/oll'},
+    ],
+    challenges:[
+      'Memoriza e executa todos os 21 algoritmos de PLL sem consultar referência',
+      'Executa F2L com look-ahead: resolve um par enquanto já planeja o próximo',
+      'Solve completo abaixo de 1 minuto em pelo menos 5 tentativas consecutivas',
+    ]
+  },
+  gaita_0:{
+    desc:'A gaita diatônica tem 10 furos — cada um produz duas notas: soprada (blow) e aspirada (draw). Antes de qualquer música, o objetivo é canal único: isolar um furo só com a boca. Parece simples mas é o fundamento de tudo. Sem canal único limpo, nenhuma melodia soa certa.',
+    resources:[
+      {name:'Harmonica For Beginners — Adam Gussow (YouTube)',url:'https://www.youtube.com/watch?v=JO8L9EuK2BM'},
+      {name:'David Barrett — Blues Harmonica (EN)',url:'https://www.bluesharmonica.com/'},
+      {name:'Harmonica.com — Guia para iniciantes',url:'https://www.harmonica.com/learn-harmonica/'},
+    ],
+    challenges:[
+      'Toca cada furo isolado de 1 a 10, blow e draw, sem vazar som dos furos vizinhos',
+      'Toca a escala de Dó maior completa subindo e descendo de forma limpa',
+      'Toca uma melodia simples completa que reconheces — de memória, sem olhar tablaturas',
+    ]
+  },
+  gaita_1:{
+    desc:'Ritmo é o que faz uma melodia soar como música. Articulação com a língua (ta, doo, dah) cria ataques diferentes para cada nota — sem ela, tudo soa contínuo e sem forma. Tocar com metrônomo é disciplina: a maioria dos iniciantes acelera sem perceber.',
+    resources:[
+      {name:'Adam Gussow — Ritmo e articulação',url:'https://www.youtube.com/watch?v=9peBvv3HXQE'},
+      {name:'Metronome Online — Gratuito',url:'https://www.metronome-online.com/'},
+      {name:'JP Allen — Harmonica Lessons (EN)',url:'https://www.youtube.com/@JPAllenMusic'},
+    ],
+    challenges:[
+      'Toca uma melodia simples com articulação de língua clara — cada nota com ataque separado',
+      'Toca a escala inteira com metrônomo a 60 BPM sem antecipar ou atrasar',
+      'Toca três músicas diferentes do começo ao fim com ritmo estável e articulação limpa',
+    ]
+  },
+  gaita_2:{
+    desc:'Bending é a técnica que dá à gaita o som característico do blues — abaixar a altura de uma nota ao mudar a posição da língua e da garganta enquanto aspira. O furo 4 draw é o mais fácil de dobrar. Leva semanas para sair limpo e afinado — é normal.',
+    resources:[
+      {name:'Adam Gussow — Como fazer bending',url:'https://www.youtube.com/watch?v=D5E7GKb3N9E'},
+      {name:'Ronnie Shellist — Bending masterclass (EN)',url:'https://www.youtube.com/watch?v=B7GQmEqhVhE'},
+      {name:'Harmonica Tuner App — Afinação em tempo real',url:'https://www.chromatictuner.com/'},
+    ],
+    challenges:[
+      'Consegue produzir o bend no furo 4 draw de forma consistente com afinação correta',
+      'Executa bends nos furos 2, 3 e 6 draw — cada um afinado e controlado',
+      'Toca uma melodia que inclui pelo menos um bend integrado naturalmente',
+    ]
+  },
+  gaita_3:{
+    desc:'A segunda posição (cross harp) coloca a gaita em Sol quando ela é de Dó — é a posição natural do blues. A escala de blues cobre os sons expressivos do estilo. Improvisar não significa tocar qualquer nota: é criar frases com começo, meio e fim sobre uma progressão.',
+    resources:[
+      {name:'Adam Gussow — Blues in second position',url:'https://www.youtube.com/watch?v=3f5oNtPOGXk'},
+      {name:'Blues Backing Tracks — YouTube',url:'https://www.youtube.com/results?search_query=blues+backing+track+harmonica'},
+      {name:'Hohner — Guia de posições da gaita',url:'https://www.hohner.de/en/service/tutorials/'},
+    ],
+    challenges:[
+      'Toca a escala de blues em segunda posição subindo e descendo de memória',
+      'Improvisa por 2 minutos sobre um backing track de blues em Lá — sem parar',
+      'Grava a improvisação e identifica: o que soou bem, o que soou deslocado',
+    ]
+  },
+  gaita_4:{
+    desc:'Vibrato, dinâmica e expressão transformam notas corretas em música. Overbends (overdraws e overblows) completam as notas que a gaita diatônica não tem nativamente. Repertório sólido — músicas que você consegue tocar bem — é o que diferencia alguém que pratica de alguém que toca.',
+    resources:[
+      {name:'Adam Gussow — Vibrato e expressão',url:'https://www.youtube.com/watch?v=WVIFaT-GRPU'},
+      {name:'Howard Levy — Overblows (EN)',url:'https://www.youtube.com/watch?v=mWi1jKjolak'},
+      {name:'Ronnie Shellist — Expressão avançada',url:'https://www.youtube.com/@RonnieShellist'},
+    ],
+    challenges:[
+      'Toca uma música com vibrato natural aplicado nas notas longas',
+      'Consegue produzir um overdraw no furo 6 de forma controlada',
+      'Grava uma performance de 3 minutos de uma música completa e ouve criticamente',
+    ]
+  },
+  cloudflare_0:{
+    desc:'Cloudflare Pages faz deploy de sites estáticos conectado ao GitHub — a cada push, o site atualiza sozinho. DNS é o sistema que traduz nomes de domínio em endereços IP. O proxy da Cloudflare (nuvem laranja) ativa CDN, HTTPS automático e proteção DDoS sem configuração extra.',
+    resources:[
+      {name:'CF Docs — Pages',url:'https://developers.cloudflare.com/pages/'},
+      {name:'CF Docs — DNS',url:'https://developers.cloudflare.com/dns/'},
+      {name:'CF Docs — Fundamentos',url:'https://developers.cloudflare.com/fundamentals/'},
+    ],
+    challenges:[
+      'Cria repositório no GitHub com um index.html e faz deploy no Cloudflare Pages — verifica deploy automático ao fazer push',
+      'Configura subdomínio personalizado (rotina.seudominio.com) apontando para o Pages com HTTPS automático',
+      'Compara os headers HTTP com proxy ativo (nuvem laranja) vs DNS-only (nuvem cinza) — observa o CF-Cache-Status',
+    ]
+  },
+  cloudflare_1:{
+    desc:'Workers são funções JavaScript que rodam nos servidores globais da Cloudflare, próximos de qualquer usuário. São a base de APIs, proxies e lógica sem servidor dedicado. O código é JS padrão com APIs extras para Request, Response e KV — tudo que já usas neste app.',
+    resources:[
+      {name:'CF Docs — Workers',url:'https://developers.cloudflare.com/workers/'},
+      {name:'Workers Playground (online)',url:'https://workers.cloudflare.com/'},
+      {name:'CF Docs — KV Namespace',url:'https://developers.cloudflare.com/kv/'},
+    ],
+    challenges:[
+      'Worker que responde GET /ping com JSON contendo status ok, timestamp atual e região do servidor',
+      'API simples: GET /dados retorna valor do KV, PUT /dados salva um JSON — testa com curl ou Insomnia',
+      'Worker proxy com CORS: recebe requisição, adiciona header Access-Control-Allow-Origin e repassa para outra URL',
+    ]
+  },
+  cloudflare_2:{
+    desc:'D1 é SQLite serverless dentro dos Workers — SQL padrão sem servidor dedicado. R2 armazena arquivos com a mesma API do S3 mas sem cobrar por transferência. Juntos formam um backend completo dentro do Cloudflare — exatamente o que este app de rotina usa.',
+    resources:[
+      {name:'CF Docs — D1 Getting Started',url:'https://developers.cloudflare.com/d1/get-started/'},
+      {name:'CF Docs — R2',url:'https://developers.cloudflare.com/r2/'},
+      {name:'CF Docs — D1 SQL API',url:'https://developers.cloudflare.com/d1/worker-api/'},
+    ],
+    challenges:[
+      'Migra o storage deste app de rotina do KV para D1 — cria schema SQL e adapta o Worker para usar db.prepare()',
+      'API de notas com D1: POST cria nota, GET lista todas, DELETE remove por id',
+      'Upload de arquivo para R2 via Worker e gera URL assinada para download com expiração de 1 hora',
+    ]
+  },
+  cloudflare_3:{
+    desc:'Zero Trust Access protege subdomínios sem alterar a aplicação — o Cloudflare verifica identidade antes de entregar a requisição. Cron Triggers executam Workers em horários definidos, sem servidor. WAF bloqueia ataques antes de chegarem à aplicação.',
+    resources:[
+      {name:'CF Docs — Access Policies',url:'https://developers.cloudflare.com/cloudflare-one/policies/access/'},
+      {name:'CF Docs — Cron Triggers',url:'https://developers.cloudflare.com/workers/configuration/cron-triggers/'},
+      {name:'CF Docs — WAF',url:'https://developers.cloudflare.com/waf/'},
+    ],
+    challenges:[
+      'Configura Zero Trust Access para proteger um subdomínio com login por email OTP — testa no celular e no computador',
+      'Cron Worker que roda às 8h todo dia, busca as tarefas do dia no KV e registra log com timestamp',
+      'Regra WAF customizada que bloqueia mais de 100 requisições por minuto para rotas de API',
+    ]
+  },
+  php_0:{
+    desc:'PHP roda no servidor e gera HTML antes de chegar ao browser. A sintaxe é próxima do JS — mas variáveis sempre começam com cifrão, não existem let/const, e o código pode aparecer misturado com HTML diretamente. Essa base é o pré-requisito para ler qualquer código Laravel sem travar.',
+    resources:[
+      {name:'PHP Manual — PT-BR',url:'https://www.php.net/manual/pt_BR/'},
+      {name:'Curso em Vídeo — PHP (YouTube)',url:'https://www.youtube.com/playlist?list=PLHz_AreHm4dm4beCCCmW4xwpmLf6EHY9k'},
+      {name:'W3Schools PHP',url:'https://www.w3schools.com/php/'},
+    ],
+    challenges:[
+      'Script PHP que recebe array de leads com nome e status, usa foreach para imprimir só os com status convertido',
+      'Função saudacao() com parâmetros nome e cargo (valor padrão: visitante) — retorna a saudação formatada',
+      'Abre routes/web.php de um projeto Laravel público no GitHub e descreve cada rota: URL, método e o que retorna',
+    ]
+  },
+  php_1:{
+    desc:'Laravel é escrito em PHP orientado a objetos. Sem entender classes, herança e interfaces, o código do framework parece magia. Com POO, tu consegues ler qualquer Controller, Service ou Model. Composer é o npm do PHP — gerencia dependências e autoload.',
+    resources:[
+      {name:'PHP The Right Way — POO',url:'https://phptherightway.com/#object-oriented-programming'},
+      {name:'Laracasts — PHP for Beginners',url:'https://laracasts.com/series/php-for-beginners-2023-edition'},
+      {name:'Composer — Documentação oficial',url:'https://getcomposer.org/doc/'},
+    ],
+    challenges:[
+      'Cria classe Lead com propriedades tipadas email e score, construtor e método qualificar() que retorna quente ou frio',
+      'Cria classe LeadVip que estende Lead e sobrescreve qualificar() para retornar sempre vip',
+      'Instala biblioteca via Composer (vlucas/phpdotenv) e usa para ler um .env num script PHP puro',
+    ]
+  },
+  php_2:{
+    desc:'Laravel segue MVC — rotas definem URLs, controllers processam lógica, views renderizam HTML. Artisan é a CLI que gera arquivos. Blade é o template engine com diretivas como @if, @foreach, @extends que compilam para PHP. Ler um projeto Laravel começa por entender essa estrutura.',
+    resources:[
+      {name:'Laravel — Documentação oficial',url:'https://laravel.com/docs/'},
+      {name:'Laracasts — Laravel from Scratch',url:'https://laracasts.com/series/30-days-to-learn-laravel-11'},
+      {name:'Laravel Daily — YouTube',url:'https://www.youtube.com/@LaravelDaily'},
+    ],
+    challenges:[
+      'Clona projeto Laravel público do GitHub, identifica todas as rotas em routes/web.php e mapeia para qual Controller vão',
+      'No Controller encontrado, lê o método index() e descreve: o que ele busca no banco, o que passa para a view',
+      'Lê um arquivo Blade do projeto e identifica: layout base, sections preenchidas e variáveis recebidas do controller',
+    ]
+  },
+  php_3:{
+    desc:'Eloquent é o ORM do Laravel — cada tabela vira um Model PHP. Migrations versionam o schema do banco junto com o código. Os relacionamentos (hasMany, belongsTo) permitem acessar dados relacionados como propriedades. Ler uma Migration ou Model te diz tudo sobre a estrutura do banco de um projeto.',
+    resources:[
+      {name:'Laravel — Eloquent ORM',url:'https://laravel.com/docs/eloquent'},
+      {name:'Laravel — Migrations',url:'https://laravel.com/docs/migrations'},
+      {name:'Laravel — Relacionamentos',url:'https://laravel.com/docs/eloquent-relationships'},
+    ],
+    challenges:[
+      'Lê as migrations de um projeto existente e reconstrói o diagrama de entidades: quais tabelas, quais colunas, quais relações',
+      'Abre um Model do projeto e identifica: fillable, relacionamentos definidos e quaisquer scopes locais',
+      'No tinker (php artisan tinker), roda queries Eloquent para entender como os dados estão estruturados no banco',
+    ]
+  },
+  php_4:{
+    desc:'APIs Laravel retornam JSON. API Resources formatam os dados antes de entregar ao cliente. Sanctum gerencia tokens de autenticação. Middlewares interceptam requisições antes do controller. Ler código de API Laravel te permite entender e integrar qualquer sistema que use esse padrão.',
+    resources:[
+      {name:'Laravel — API Resources',url:'https://laravel.com/docs/eloquent-resources'},
+      {name:'Laravel — Sanctum',url:'https://laravel.com/docs/sanctum'},
+      {name:'Laravel — Middleware',url:'https://laravel.com/docs/middleware'},
+    ],
+    challenges:[
+      'Lê um API Resource de um projeto existente e descreve quais campos ele expõe e quais esconde — e por quê',
+      'Identifica todas as rotas de API (routes/api.php), seus middlewares e quais requerem autenticação',
+      'Testa um endpoint protegido do projeto via Insomnia — sem token e com token — observa as respostas',
+    ]
+  },
+};
+
+let studiesData={};
+let customSubjects=[];
+let activeSubjectId=null;
+let studiesEditMode=false;
+
+async function loadStudies(){
+  try{const r=await store.get('studies_data');if(r)studiesData=JSON.parse(r);}catch(e){studiesData={};}
+  try{const r=await store.get('custom_subjects');if(r)customSubjects=JSON.parse(r);}catch(e){customSubjects=[];}
+}
+async function saveStudies(){await store.set('studies_data',JSON.stringify(studiesData));}
+async function saveCustomSubjects(){await store.set('custom_subjects',JSON.stringify(customSubjects));}
+
+function getSubjectProgress(subj){
+  const totalLevels=subj.levels.length;
+  const completedLevels=subj.levels.filter(lvl=>isLevelComplete(subj.id,lvl)).length;
+  const totalItems=subj.levels.reduce((s,l)=>s+l.items.length,0);
+  const doneItems=subj.levels.reduce((s,l)=>s+l.items.filter(it=>studiesData[it.id]).length,0);
+  const pct=totalItems?Math.round(doneItems/totalItems*100):0;
+  // current tier based on last completed level
+  let tier='basico';
+  subj.levels.forEach(lvl=>{if(isLevelComplete(subj.id,lvl))tier=lvl.tier;});
+  return{totalLevels,completedLevels,totalItems,doneItems,pct,tier};
+}
+
+function isLevelComplete(subjId,lvl){
+  return lvl.items.every(it=>studiesData[it.id]);
+}
+
+function renderLvlContent(subjId, lvlNum, isCustom){
+  const key=`${subjId}_${lvlNum-1}`;
+  const c=STUDY_CONTENT[key];
+  // For custom subjects, use data stored in the level itself
+  if(isCustom){
+    const subj=customSubjects.find(s=>s.id===subjId);
+    const lvl=subj&&subj.levels[lvlNum-1];
+    const desc=lvl&&lvl.content||'';
+    const resources=lvl&&lvl.resources||[];
+    if(studiesEditMode){
+      return`<div class="lvl-content">
+        <textarea class="ifield lvl-content-edit" placeholder="Descreve o conteúdo deste nível..." rows="4"
+          onchange="saveCustomLvlContent('${subjId}',${lvlNum-1},this.value)"
+          style="width:100%;resize:vertical;font-family:var(--sans);font-size:12px;">${desc}</textarea>
+        <div class="lvl-content-resources" style="margin-top:8px;">
+          <div class="lvl-content-res-title">📚 Links úteis</div>
+          ${resources.map((r,ri)=>`
+            <div style="display:flex;align-items:center;gap:6px;padding:4px 0;">
+              <a class="lvl-content-res-link" href="${r.url}" target="_blank" rel="noopener" style="flex:1;">
+                <span class="lvl-content-res-name">${r.name}</span>
+                <span class="lvl-content-res-arrow">↗</span>
+              </a>
+              <button class="refs-del-btn" onclick="deleteCustomLvlResource('${subjId}',${lvlNum-1},${ri})">✕</button>
+            </div>`).join('')}
+          <div style="display:flex;gap:6px;margin-top:6px;">
+            <input class="ifield" id="lr_name_${subjId}_${lvlNum}" placeholder="Nome do link" style="flex:1;font-size:11px;"/>
+            <input class="ifield" id="lr_url_${subjId}_${lvlNum}" placeholder="URL" style="flex:1;font-size:11px;"/>
+            <button class="btn btn-primary" style="padding:4px 10px;font-size:9px;" onclick="addCustomLvlResource('${subjId}',${lvlNum-1},'${subjId}_${lvlNum}')">+ Add</button>
+          </div>
+        </div>
+      </div>`;
+    }
+    // View mode
+    return`<div class="lvl-content">
+      ${desc?`<div class="lvl-content-desc">${desc}</div>`:'<div class="lvl-no-content">SEM CONTEÚDO AINDA</div>'}
+      ${resources.length?`
+        <div class="lvl-content-resources">
+          <div class="lvl-content-res-title">📚 Links úteis</div>
+          ${resources.map(r=>`
+            <a class="lvl-content-res-link" href="${r.url}" target="_blank" rel="noopener">
+              <span class="lvl-content-res-name">${r.name}</span>
+              <span class="lvl-content-res-arrow">↗</span>
+            </a>`).join('')}
+        </div>`:''}
+    </div>`;
+  }
+  if(!c)return`<div class="lvl-no-content">SEM CONTEÚDO AINDA</div>`;
+  return`<div class="lvl-content">
+    <div class="lvl-content-desc">${c.desc}</div>
+    ${c.resources&&c.resources.length?`
+      <div class="lvl-content-resources">
+        <div class="lvl-content-res-title">📚 Materiais recomendados</div>
+        ${c.resources.map(r=>`
+          <a class="lvl-content-res-link" href="${r.url}" target="_blank" rel="noopener">
+            <span class="lvl-content-res-name">${r.name}</span>
+            <span class="lvl-content-res-arrow">↗</span>
+          </a>`).join('')}
+      </div>`:''}
+  </div>`;
+}
+
+function renderLvlChallenges(subjId, lvlNum, isCustom){
+  const key=`${subjId}_${lvlNum-1}`;
+  const c=STUDY_CONTENT[key];
+  if(isCustom){
+    const subj=customSubjects.find(s=>s.id===subjId);
+    const lvl=subj&&subj.levels[lvlNum-1];
+    const challenges=lvl&&lvl.challenges||[];
+    if(studiesEditMode){
+      return`<div class="lvl-challenges">
+        ${challenges.map((ch,ci)=>`
+          <div class="lvl-challenge">
+            <div class="lvl-challenge-num">${ci+1}</div>
+            <div class="lvl-challenge-text" style="flex:1;">${ch}</div>
+            <button class="refs-del-btn" onclick="deleteCustomChallenge('${subjId}',${lvlNum-1},${ci})">✕</button>
+          </div>`).join('')}
+        <div style="display:flex;gap:6px;margin-top:8px;padding:0 2px;">
+          <input class="ifield" id="ch_input_${subjId}_${lvlNum}" placeholder="Descreve o desafio..." style="flex:1;font-size:11px;"/>
+          <button class="btn btn-primary" style="padding:4px 10px;font-size:9px;" onclick="addCustomChallenge('${subjId}',${lvlNum-1},'${subjId}_${lvlNum}')">+ Add</button>
+        </div>
+      </div>`;
+    }
+    // View mode
+    if(!challenges.length)return`<div class="lvl-no-content">SEM DESAFIOS AINDA</div>`;
+    return`<div class="lvl-challenges">
+      ${challenges.map((ch,i)=>`
+        <div class="lvl-challenge">
+          <div class="lvl-challenge-num">${i+1}</div>
+          <div class="lvl-challenge-text">${ch}</div>
+        </div>`).join('')}
+    </div>`;
+  }
+  if(!c||!c.challenges||!c.challenges.length)return`<div class="lvl-no-content">SEM DESAFIOS AINDA</div>`;
+  return`<div class="lvl-challenges">
+    ${c.challenges.map((ch,i)=>`
+      <div class="lvl-challenge">
+        <div class="lvl-challenge-num">${i+1}</div>
+        <div class="lvl-challenge-text">${ch}</div>
+      </div>`).join('')}
+  </div>`;
+}
+
+function switchLvlTab(li, tab){
+  ['itens','conteudo','desafios'].forEach(t=>{
+    document.getElementById(`lt_${li}_${t}`)?.classList.toggle('active',t===tab);
+    document.getElementById(`ltp_${li}_${t}`)?.classList.toggle('active',t===tab);
+  });
+}
+function renderStudies(){
+  const body=document.getElementById('studiesBody');
+  const header=document.getElementById('studiesHeader');
+  body.innerHTML='';
+
+  if(activeSubjectId){
+    // Detail view
+    const subj=[...DEFAULT_SUBJECTS,...customSubjects].find(s=>s.id===activeSubjectId);
+    if(!subj)return;
+    const isCustom=customSubjects.some(s=>s.id===activeSubjectId);
+    const prog=getSubjectProgress(subj);
+    const tierInfo=TIER[prog.tier];
+    header.innerHTML=`
+      <button class="studies-back" onclick="closeSubject()">← Voltar</button>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span style="font-size:22px;">${subj.icon}</span>
+        <div style="flex:1;">
+          <div class="studies-title">${subj.name}</div>
+          <div class="studies-sub" style="color:${tierInfo.color};">Nível ${prog.completedLevels}/${prog.totalLevels} · ${tierInfo.label}</div>
+        </div>
+        ${isCustom?`<button class="btn${studiesEditMode?' btn-primary':''}" onclick="toggleStudiesEdit()" style="font-size:9px;padding:5px 12px;flex-shrink:0;">${studiesEditMode?'✓ Pronto':'✏ Editar'}</button>`:''}
+      </div>
+      <div style="margin-top:10px;">
+        <div style="height:5px;background:var(--b2);border-radius:3px;">
+          <div style="height:100%;width:${prog.pct}%;background:${tierInfo.color};border-radius:3px;transition:width .5s;"></div>
+        </div>
+        <div style="font-family:var(--mono);font-size:9px;color:var(--muted);margin-top:4px;">${prog.doneItems}/${prog.totalItems} itens concluídos</div>
+      </div>`;
+
+    // Legend
+    body.innerHTML=`<div class="lvl-legend">
+      ${Object.entries(TIER).map(([k,v])=>`
+        <div class="lvl-legend-item">
+          <div class="lvl-legend-dot" style="background:${v.color};"></div>
+          ${v.label}
+        </div>`).join('')}
+    </div>`;
+
+    subj.levels.forEach((lvl,li)=>{
+      const t=TIER[lvl.tier];
+      const complete=isLevelComplete(subj.id,lvl);
+      const doneCount=lvl.items.filter(it=>studiesData[it.id]).length;
+      const card=document.createElement('div');
+      card.className='lvl-card'+(complete?' completed':'');
+      card.innerHTML=`
+        <div class="lvl-card-hdr" onclick="toggleLvl(${li})">
+          <div class="lvl-num" style="color:${t.color};">${lvl.num}</div>
+          <div class="lvl-info">
+            <div class="lvl-title">${lvl.title}</div>
+            <div class="lvl-meta">${doneCount}/${lvl.items.length} itens</div>
+          </div>
+          <span class="lvl-badge" style="color:${t.color};background:${t.bg};">${t.label}</span>
+          <span class="lvl-chevron" id="lc_${li}">›</span>
+        </div>
+        <div class="lvl-items" id="li_${li}">
+          <div class="lvl-tabs">
+            <button class="lvl-tab active" id="lt_${li}_itens" onclick="switchLvlTab(${li},'itens')">Itens</button>
+            <button class="lvl-tab" id="lt_${li}_conteudo" onclick="switchLvlTab(${li},'conteudo')">Conteúdo</button>
+            <button class="lvl-tab" id="lt_${li}_desafios" onclick="switchLvlTab(${li},'desafios')">Desafios</button>
+          </div>
+          <div class="lvl-tab-panel active" id="ltp_${li}_itens">
+            ${lvl.items.map((item,ii)=>{
+              const done=studiesData[item.id];
+              const chkHtml=done
+                ?'<svg width="10" height="10" viewBox="0 0 11 11" fill="none"><path d="M1.5 5.5l3 3 5-5" stroke="#0c0c10" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+                :'';
+              if(studiesEditMode){
+                return`<div class="lvl-item${done?' done':''}">
+                  <button class="refs-del-btn" onclick="deleteCustomItem('${subj.id}',${li},${ii})" style="flex-shrink:0;margin-top:1px;">✕</button>
+                  <div class="lvl-item-label">${item.title}</div>
+                </div>`;
+              }
+              return`<div class="lvl-item${done?' done':''}" onclick="toggleStudyItem('${item.id}','${subj.id}')">
+                <div class="lvl-item-chk">${chkHtml}</div>
+                <div class="lvl-item-label">${item.title}</div>
+              </div>`;
+            }).join('')}
+            ${isCustom&&studiesEditMode?`<div style="padding:6px 14px 10px;"><button class="refs-add-btn" onclick="openItemForm('${subj.id}',${li})">+ Item</button></div>`:''}
+            <div class="lvl-complete-badge${complete?' show':''}">✓ Nível ${lvl.num} concluído!</div>
+          </div>
+          <div class="lvl-tab-panel" id="ltp_${li}_conteudo">
+            ${renderLvlContent(subj.id, lvl.num, isCustom)}
+          </div>
+          <div class="lvl-tab-panel" id="ltp_${li}_desafios">
+            ${renderLvlChallenges(subj.id, lvl.num, isCustom)}
+          </div>
+        </div>`;
+      body.appendChild(card);
+    });
+
+    if(isCustom&&studiesEditMode){
+      const addLvlBtn=document.createElement('button');
+      addLvlBtn.className='refs-add-btn';
+      addLvlBtn.textContent='+ Nível';
+      addLvlBtn.style.marginTop='4px';
+      addLvlBtn.onclick=()=>openLvlForm(subj.id);
+      body.appendChild(addLvlBtn);
+    }
+
+  } else {
+    // Grid view
+    header.innerHTML=`
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <div>
+          <div class="studies-title">Estudos</div>
+          <div class="studies-sub">Seleciona uma área para estudar</div>
+        </div>
+        <button class="btn btn-primary" style="font-size:9px;padding:5px 12px;flex-shrink:0;" onclick="openSubjectForm()">+ Área</button>
+      </div>`;
+    const grid=document.createElement('div');
+    grid.className='studies-grid';
+    const allSubjects=[...DEFAULT_SUBJECTS,...customSubjects];
+    allSubjects.forEach(subj=>{
+      const prog=getSubjectProgress(subj);
+      const t=TIER[prog.tier];
+      const isCustom=customSubjects.some(s=>s.id===subj.id);
+
+      const wrap=document.createElement('div');
+      wrap.className='subj-card-wrap';
+
+      const card=document.createElement('div');
+      card.className='subj-card';
+      card.innerHTML=`
+        <div class="subj-card-top">
+          <div class="subj-icon">${subj.icon}</div>
+          <div style="flex:1;min-width:0;">
+            <div class="subj-name">${subj.name}</div>
+            <div class="subj-lvl" style="color:${t.color};">Nível ${prog.completedLevels} · ${t.label}</div>
+          </div>
+        </div>
+        <div class="subj-prog-wrap"><div class="subj-prog-fill" style="width:${prog.pct}%;background:${t.color};"></div></div>
+        <div class="subj-prog-label">${prog.doneItems}/${prog.totalItems} itens · ${prog.pct}%</div>`;
+      card.addEventListener('click',()=>openSubject(subj.id));
+      wrap.appendChild(card);
+
+      if(isCustom){
+        const delBtn=document.createElement('button');
+        delBtn.className='subj-del-ext';
+        delBtn.textContent='✕';
+        delBtn.title='Excluir área';
+        delBtn.addEventListener('click',(e)=>{
+          e.stopImmediatePropagation();
+          e.preventDefault();
+          deleteCustomSubject(subj.id);
+        });
+        wrap.appendChild(delBtn);
+      }
+
+      grid.appendChild(wrap);
+    });
+    body.appendChild(grid);
+  }
+}
+
+function openSubject(id){
+  activeSubjectId=id;
+  studiesEditMode=false;
+  renderStudies();
+}
+
+function closeSubject(){
+  activeSubjectId=null;
+  studiesEditMode=false;
+  renderStudies();
+}
+
+function toggleStudiesEdit(){
+  studiesEditMode=!studiesEditMode;
+  // Preserve which levels are open before re-render
+  const openLevels=[];
+  document.querySelectorAll('.lvl-items').forEach((el,i)=>{
+    if(el.classList.contains('open'))openLevels.push(i);
+  });
+  renderStudies();
+  // Restore open levels
+  openLevels.forEach(i=>{
+    const el=document.getElementById(`li_${i}`);
+    const chev=document.getElementById(`lc_${i}`);
+    if(el){el.classList.add('open');}
+    if(chev){chev.style.transform='rotate(90deg)';}
+  });
+}
+
+async function deleteCustomItem(subjId,lvlIdx,itemIdx){
+  const subj=customSubjects.find(s=>s.id===subjId);
+  if(!subj||!subj.levels[lvlIdx])return;
+  const item=subj.levels[lvlIdx].items[itemIdx];
+  if(item&&studiesData[item.id])delete studiesData[item.id];
+  subj.levels[lvlIdx].items.splice(itemIdx,1);
+  await saveCustomSubjects();
+  await saveStudies();
+  renderStudies();
+  showToast('Item removido');
+}
+
+function toggleLvl(li){
+  const items=document.getElementById(`li_${li}`);
+  const chev=document.getElementById(`lc_${li}`);
+  const open=items.classList.toggle('open');
+  chev.style.transform=open?'rotate(90deg)':'';
+}
+
+async function toggleStudyItem(itemId,subjId){
+  studiesData[itemId]=!studiesData[itemId];
+  if(!studiesData[itemId])delete studiesData[itemId];
+  await saveStudies();
+  renderStudies();
+}
+// ═══ ESTUDOS — CRUD ═══
+let editingLvlSubjId=null,editingItemSubjId=null,editingItemLvlIdx=null;
+
+function openSubjectForm(){
+  document.getElementById('sfIconBtn').textContent='📌';
+  document.getElementById('sfName').value='';
+  document.getElementById('subjectModal').classList.add('open');
+  setTimeout(()=>document.getElementById('sfName').focus(),100);
+}
+async function saveSubjectForm(){
+  const name=document.getElementById('sfName').value.trim();
+  if(!name)return;
+  const icon=document.getElementById('sfIconBtn').textContent.trim()||'📌';
+  const id='subj_'+Date.now();
+  customSubjects.push({id,icon,name,levels:[]});
+  await saveCustomSubjects();
+  document.getElementById('subjectModal').classList.remove('open');
+  renderStudies();
+  showToast('Área criada');
+}
+async function deleteCustomSubject(id){
+  customSubjects=customSubjects.filter(s=>s.id!==id);
+  await saveCustomSubjects();
+  renderStudies();
+  showToast('Área removida');
+}
+async function saveCustomLvlContent(subjId,lvlIdx,val){
+  const subj=customSubjects.find(s=>s.id===subjId);
+  if(!subj||!subj.levels[lvlIdx])return;
+  subj.levels[lvlIdx].content=val;
+  await saveCustomSubjects();
+}
+async function addCustomLvlResource(subjId,lvlIdx,inputKey){
+  const name=document.getElementById(`lr_name_${inputKey}`).value.trim();
+  const url=document.getElementById(`lr_url_${inputKey}`).value.trim();
+  if(!name||!url)return;
+  const subj=customSubjects.find(s=>s.id===subjId);
+  if(!subj||!subj.levels[lvlIdx])return;
+  if(!subj.levels[lvlIdx].resources)subj.levels[lvlIdx].resources=[];
+  subj.levels[lvlIdx].resources.push({name,url});
+  await saveCustomSubjects();
+  renderStudies();
+  showToast('Link adicionado');
+}
+async function deleteCustomLvlResource(subjId,lvlIdx,ri){
+  const subj=customSubjects.find(s=>s.id===subjId);
+  if(!subj||!subj.levels[lvlIdx])return;
+  subj.levels[lvlIdx].resources.splice(ri,1);
+  await saveCustomSubjects();
+  renderStudies();
+}
+async function addCustomChallenge(subjId,lvlIdx,inputKey){
+  const val=document.getElementById(`ch_input_${inputKey}`).value.trim();
+  if(!val)return;
+  const subj=customSubjects.find(s=>s.id===subjId);
+  if(!subj||!subj.levels[lvlIdx])return;
+  if(!subj.levels[lvlIdx].challenges)subj.levels[lvlIdx].challenges=[];
+  subj.levels[lvlIdx].challenges.push(val);
+  await saveCustomSubjects();
+  renderStudies();
+  showToast('Desafio adicionado');
+}
+async function deleteCustomChallenge(subjId,lvlIdx,ci){
+  const subj=customSubjects.find(s=>s.id===subjId);
+  if(!subj||!subj.levels[lvlIdx])return;
+  subj.levels[lvlIdx].challenges.splice(ci,1);
+  await saveCustomSubjects();
+  renderStudies();
+}
+function closeSubjectModal(e){if(!e||e.target===document.getElementById('subjectModal'))document.getElementById('subjectModal').classList.remove('open');}
+
+function openLvlForm(subjId){
+  editingLvlSubjId=subjId;
+  document.getElementById('lvlFormTitle').textContent='Novo nível';
+  document.getElementById('lfTitle').value='';
+  document.getElementById('lfTier').value='basico';
+  document.getElementById('lvlFormModal').classList.add('open');
+  setTimeout(()=>document.getElementById('lfTitle').focus(),100);
+}
+async function saveLvlForm(){
+  const title=document.getElementById('lfTitle').value.trim();
+  if(!title)return;
+  const subj=customSubjects.find(s=>s.id===editingLvlSubjId);
+  if(!subj)return;
+  subj.levels.push({num:subj.levels.length+1,tier:document.getElementById('lfTier').value,title,items:[]});
+  await saveCustomSubjects();
+  document.getElementById('lvlFormModal').classList.remove('open');
+  renderStudies();
+  showToast('Nível adicionado');
+}
+function closeLvlFormModal(e){if(!e||e.target===document.getElementById('lvlFormModal'))document.getElementById('lvlFormModal').classList.remove('open');}
+
+function openItemForm(subjId,lvlIdx){
+  editingItemSubjId=subjId;
+  editingItemLvlIdx=lvlIdx;
+  document.getElementById('ifTitle').value='';
+  document.getElementById('itemFormModal').classList.add('open');
+  setTimeout(()=>document.getElementById('ifTitle').focus(),100);
+}
+async function saveItemForm(){
+  const title=document.getElementById('ifTitle').value.trim();
+  if(!title)return;
+  const subj=customSubjects.find(s=>s.id===editingItemSubjId);
+  if(!subj||!subj.levels[editingItemLvlIdx])return;
+  const id=`${editingItemSubjId}_${editingItemLvlIdx}_${Date.now()}`;
+  subj.levels[editingItemLvlIdx].items.push({id,title});
+  await saveCustomSubjects();
+  document.getElementById('itemFormModal').classList.remove('open');
+  renderStudies();
+  showToast('Item adicionado');
+}
+function closeItemFormModal(e){if(!e||e.target===document.getElementById('itemFormModal'))document.getElementById('itemFormModal').classList.remove('open');}
+
 let books=[];
 let booksFilter='todos';
 let editingBookId=null;
@@ -1769,6 +3235,7 @@ function switchView(view,btn){
   applyLayout();
   if(view==='tracker')renderTracker(activeDay);
   if(view==='history')renderHistory();
+  if(view==='studies')renderStudies();
   if(view==='refs')renderRefs();
   if(view==='editor')renderEditor(activeCmsDay);
 }
@@ -1777,16 +3244,68 @@ function switchView(view,btn){
 let toastTmr;
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastTmr);toastTmr=setTimeout(()=>t.classList.remove('show'),2400);}
 
+// ═══ SERVICE WORKER & NOTIFICAÇÕES ═══
+async function registerSW(){
+  if(!('serviceWorker' in navigator))return;
+  try{
+    await navigator.serviceWorker.register('/sw.js');
+  }catch(e){console.warn('SW registro falhou:',e);}
+}
+
+async function requestNotificationPermission(){
+  if(!('Notification' in window))return false;
+  if(Notification.permission==='granted')return true;
+  if(Notification.permission==='denied')return false;
+  const result=await Notification.requestPermission();
+  return result==='granted';
+}
+
+function scheduleNotifications(){
+  if(!('serviceWorker' in navigator)||Notification.permission!=='granted')return;
+  navigator.serviceWorker.ready.then(reg=>{
+    const now=new Date();
+    const todayIdx_=todayIdx();
+    const dayName=DAYS[todayIdx_];
+    const tasks=sortByTime(routine[dayName]||[]);
+    tasks.forEach(task=>{
+      if(checks[task.id])return; // já marcada, não notifica
+      const t=parseTimeRange(task.time);
+      if(!t)return;
+      const h=Math.floor(t.start/60);
+      const m=t.start%60;
+      const target=new Date();
+      target.setHours(h,m,0,0);
+      const delay=target-now;
+      if(delay<0||delay>8*60*60*1000)return; // só próximas 8h
+      setTimeout(()=>{
+        if(checks[task.id])return; // checou entre agora e o horário
+        reg.showNotification('Rotina',{
+          body:`${task.icon} ${task.label} · ${task.time}`,
+          icon:'/icon-192.png',
+          badge:'/icon-192.png',
+          tag:task.id,
+          renotify:false,
+        });
+      },delay);
+    });
+  });
+}
+
 // ═══ INIT ═══
 window.addEventListener('resize',()=>{applyLayout();if(currentView==='editor')renderEditor(activeCmsDay);});
 (async()=>{
+  await registerSW();
   await loadAll();
   await loadBooks();
   await loadRefs();
+  await loadStudies();
   snapshotWeek();
   await saveHistory();
   applyLayout();
   renderTracker();
+  // Pede permissão e agenda notificações
+  const granted=await requestNotificationPermission();
+  if(granted)scheduleNotifications();
 })();
 </script>
 </body>
