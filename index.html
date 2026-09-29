@@ -1,0 +1,592 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#0c0c10" />
+    <title>Rotina</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="topbar">
+        <div class="brand">ROTINA<span>/</span>SEMANAL</div>
+        <div class="week-badge" id="weekBadge">—</div>
+        <button class="gear-btn" id="gearBtn" title="Configuração">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </button>
+      </header>
+      <div class="views">
+        <!-- ① TRACKER -->
+        <div class="view active" id="view-tracker">
+          <div class="score-banner">
+            <div class="score-item">
+              <span class="score-item-label">Disciplina</span>
+              <span class="score-item-value" id="scoreDisciplina">—</span>
+              <span class="score-item-sub" id="scoreDisciplinaSub"></span>
+            </div>
+            <div class="score-item">
+              <span class="score-item-label">Estudos</span>
+              <span class="score-item-value" id="scoreEstudos">—</span>
+              <span class="score-item-sub" id="scoreEstudosSub"></span>
+            </div>
+          </div>
+          <div class="tracker-body">
+            <div class="day-strip" id="dayStrip"></div>
+            <div class="tracker-panel">
+              <div class="tasks-area" id="tasksList"></div>
+              <div id="journalPanel"></div>
+              <div class="week-bar">
+                <span class="wb-label">Semana</span>
+                <div class="wb-track">
+                  <div class="wb-fill" id="weekFill" style="width: 0%"></div>
+                </div>
+                <span class="wb-pct" id="weekPct">0%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- HISTÓRICO -->
+        <div class="view" id="view-history">
+          <div class="hist-header">
+            <div class="hist-title">Histórico</div>
+            <div class="hist-sub">Disciplina e estudos por semana</div>
+          </div>
+          <div class="hist-list" id="histList"></div>
+        </div>
+
+        <!-- ② CONFIG (engrenagem) -->
+        <div class="view" id="view-config">
+          <div class="config-topbar">
+            <button class="back-btn" id="configBackBtn">← Voltar</button>
+            <span class="config-title">Configuração</span>
+            <button class="back-btn" id="logoutBtn" style="margin-left: auto">Sair</button>
+          </div>
+          <div class="config-body">
+            <section class="config-section">
+              <div class="config-section-hdr">Regras de rotina</div>
+              <div class="tipos-grid" id="regraTiposGrid"></div>
+              <div class="regras-list" id="regrasList"></div>
+            </section>
+            <section class="config-section">
+              <div class="config-section-hdr">Catálogo de tipos</div>
+              <div class="regras-list" id="tiposList"></div>
+            </section>
+            <section class="config-section">
+              <div class="config-section-hdr">Importação e exportação</div>
+              <div class="config-actions">
+                <button class="btn btn-primary" id="exportBtn">⬇ Exportar tudo</button>
+                <label class="btn" for="importFileInput">⬆ Importar</label>
+                <input type="file" id="importFileInput" accept="application/json" style="display:none">
+              </div>
+            </section>
+            <section class="config-section">
+              <div class="config-section-hdr">Manutenção — chaves antigas da v1</div>
+              <button class="btn" id="scanLegacyBtn">Procurar chaves antigas</button>
+              <div id="legacyKeysList" style="margin-top:8px"></div>
+            </section>
+          </div>
+        </div>
+        <!-- ③ LIVROS -->
+        <div class="view" id="view-refs">
+          <div class="refs-header-simple">
+            <div class="refs-title-simple">Livros</div>
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                flex-wrap: wrap;
+              "
+            >
+              <div class="books-filters" id="booksFilters"></div>
+              <button
+                class="btn btn-primary"
+                style="font-size: 12px; padding: 5px 12px; flex-shrink: 0"
+                onclick="openBookForm()"
+              >
+                + Livro
+              </button>
+            </div>
+          </div>
+          <div class="books-list" id="booksList"></div>
+        </div>
+        <!-- ⑤ ESTUDOS -->
+        <div class="view" id="view-studies">
+          <div class="studies-header" id="studiesHeader">
+            <div class="studies-title-row">
+              <div class="studies-title">Estudos</div>
+              <div class="estudos-streak" id="estudosStreak">—</div>
+            </div>
+            <div class="studies-sub" id="estudosSub">—</div>
+            <div class="estudos-modulo-foco-row">
+              <label class="field-label" for="estudosModuloFocoSelect" style="margin:0;">Módulo em foco</label>
+              <select class="ifield" id="estudosModuloFocoSelect"></select>
+              <label class="btn" for="estudosImportInput">⬆ Importar módulo</label>
+              <input type="file" id="estudosImportInput" accept="application/json" style="display:none">
+            </div>
+          </div>
+          <div class="studies-body" id="studiesBody">
+            <div class="estudos-zona-acao">
+              <div class="estudos-kpis" id="estudosKpis"></div>
+              <div class="estudo-prazo" id="estudoPrazo">
+                <div class="estudo-prazo-row">
+                  <span class="estudo-prazo-label">Prazo do módulo em foco</span>
+                  <input type="date" class="ifield estudo-prazo-input" id="estudoPrazoInput">
+                </div>
+                <div class="estudo-prazo-projecao" id="estudoPrazoProjecao"></div>
+              </div>
+              <div id="estudosAgora"></div>
+              <div id="estudosRevisar"></div>
+            </div>
+            <div class="estudos-divisor">
+              <div class="estudos-divisor-k">Daqui para baixo é referência</div>
+              <div class="estudos-divisor-s" id="estudosDivisorSub"></div>
+            </div>
+            <div class="estudos-filtros" id="estudosFiltros"></div>
+            <div id="estudosNav"></div>
+          </div>
+        </div>
+
+        <!-- VAGAS -->
+        <div class="view" id="view-vagas">
+          <div class="vagas-header">
+            <div class="vagas-banner">
+              <div class="vagas-indicador">
+                <span class="vagas-indicador-valor" id="vagasCandidaturasVal">0/0</span>
+                <span class="vagas-indicador-label">Candidaturas/sem</span>
+              </div>
+              <div class="vagas-indicador">
+                <span class="vagas-indicador-valor" id="vagasAtivasVal">0</span>
+                <span class="vagas-indicador-label">Ativas</span>
+              </div>
+              <div class="vagas-indicador">
+                <span class="vagas-indicador-valor" id="vagasAcaoVal">0</span>
+                <span class="vagas-indicador-label">Precisa de ação</span>
+              </div>
+            </div>
+            <div class="vagas-controls">
+              <div class="vagas-filtros" id="vagasFiltros"></div>
+              <button class="view-toggle-btn" id="vagasViewToggleBtn" title="Alternar visualização">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+                  <rect x="3" y="3" width="7" height="18" rx="1" />
+                  <rect x="14" y="3" width="7" height="11" rx="1" />
+                  <rect x="14" y="17" width="7" height="4" rx="1" />
+                </svg>
+              </button>
+              <button class="btn btn-primary" id="vagasNovaBtn" style="font-size: 12px; padding: 5px 12px; flex-shrink: 0;">+ Vaga</button>
+            </div>
+          </div>
+          <div class="vagas-body" id="vagasBody">
+            <div id="vagasAcaoSecao"></div>
+            <div id="vagasListaWrap"></div>
+            <div id="vagasKanbanWrap" style="display: none"></div>
+          </div>
+        </div>
+      </div>
+
+      <nav class="bottom-nav">
+        <button
+          class="bnav-btn active"
+          id="bn-tracker"
+          onclick="switchView('tracker', this)"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+          >
+            <rect x="3" y="5" width="6" height="6" rx="1" />
+            <rect x="3" y="13" width="6" height="6" rx="1" />
+            <line x1="13" y1="8" x2="21" y2="8" />
+            <line x1="13" y1="16" x2="21" y2="16" />
+          </svg>
+          Tracker
+        </button>
+        <button
+          class="bnav-btn"
+          id="bn-history"
+          onclick="switchView('history', this)"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+          >
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+          </svg>
+          Histórico
+        </button>
+        <button
+          class="bnav-btn"
+          id="bn-studies"
+          onclick="switchView('studies', this)"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+          >
+            <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+            <path d="M6 12v5c3 3 9 3 12 0v-5" />
+          </svg>
+          Estudos
+        </button>
+        <button
+          class="bnav-btn"
+          id="bn-refs"
+          onclick="switchView('refs', this)"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+          >
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+            <path
+              d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"
+            />
+          </svg>
+          Livros
+        </button>
+        <button
+          class="bnav-btn"
+          id="bn-vagas"
+          onclick="switchView('vagas', this)"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+          >
+            <rect x="2" y="7" width="20" height="14" rx="2" />
+            <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+            <line x1="2" y1="13" x2="22" y2="13" />
+          </svg>
+          Vagas
+        </button>
+      </nav>
+    </div>
+
+    <!-- LOGIN OVERLAY (sem onclick de fechar — bloqueia o app até autenticar) -->
+    <div class="modal-overlay" id="loginOverlay">
+      <div class="modal-sheet" style="padding: 0 0 16px">
+        <div class="modal-handle"></div>
+        <div class="modal-title">Entrar</div>
+        <div style="padding: 0 16px; display: flex; flex-direction: column; gap: 10px;">
+          <input
+            class="ifield"
+            id="loginSenhaInput"
+            type="password"
+            placeholder="Senha"
+            autocomplete="current-password"
+            style="width: 100%"
+          />
+          <div class="login-erro" id="loginErro"></div>
+          <button class="btn btn-primary" id="loginSubmitBtn" style="width: 100%">Entrar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ICON PICKER MODAL -->
+    <div class="modal-overlay" id="iconModal" onclick="closeIconModal(event)">
+      <div class="modal-sheet">
+        <div class="modal-handle"></div>
+        <div class="modal-title">Escolher ícone</div>
+        <div class="icon-grid" id="iconGrid"></div>
+      </div>
+    </div>
+
+    <!-- TIME PICKER MODAL -->
+    <div class="modal-overlay" id="timeModal" onclick="closeTimeModal(event)">
+      <div class="time-modal-sheet">
+        <div class="modal-handle"></div>
+        <div class="time-modal-hdr">
+          <span class="time-modal-title">Período</span>
+          <button class="time-modal-done" onclick="confirmTime()">
+            Confirmar
+          </button>
+        </div>
+        <div class="time-pickers-wrap">
+          <div class="time-picker-group">
+            <div class="tpg-label">Início</div>
+            <div class="tpg-pickers">
+              <div class="drum-wrap" id="startH"></div>
+              <div class="time-sep">:</div>
+              <div class="drum-wrap" id="startM"></div>
+            </div>
+          </div>
+          <div class="between-label">até</div>
+          <div class="time-picker-group">
+            <div class="tpg-label">Fim</div>
+            <div class="tpg-pickers">
+              <div class="drum-wrap" id="endH"></div>
+              <div class="time-sep">:</div>
+              <div class="drum-wrap" id="endM"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REGRA FORM MODAL -->
+    <div class="modal-overlay" id="regraModal" onclick="closeRegraModal(event)">
+      <div class="modal-sheet" style="padding: 0 0 16px">
+        <div class="modal-handle"></div>
+        <div class="modal-title" id="regraModalTitle">Nova regra</div>
+        <div style="padding: 0 16px; display: flex; flex-direction: column; gap: 10px;">
+          <div class="rf-tipo-label" id="rfTipoLabel">—</div>
+          <input class="ifield" id="rfTitulo" type="text" placeholder="Título (opcional, padrão: nome do tipo)" style="width: 100%" />
+
+          <div>
+            <label class="field-label">Peso: <span id="rfPesoVal">4</span></label>
+            <input type="range" class="pts-slider" id="rfPeso" min="1" max="10" value="4" style="width:100%" />
+          </div>
+
+          <select class="ifield" id="rfCadencia" style="width: 100%">
+            <option value="semanal">Semanal</option>
+            <option value="quinzenal">Quinzenal</option>
+            <option value="unica">Única</option>
+          </select>
+
+          <div id="rfDiasWrap">
+            <label class="field-label">Dias</label>
+            <div class="dias-pills" id="rfDiasPills"></div>
+          </div>
+          <div id="rfAncoraWrap">
+            <label class="field-label">Âncora (segunda-feira de referência)</label>
+            <input class="ifield" id="rfAncora" type="date" style="width: 100%" />
+          </div>
+          <div id="rfDataWrap">
+            <label class="field-label">Data</label>
+            <input class="ifield" id="rfData" type="date" style="width: 100%" />
+          </div>
+
+          <div>
+            <label class="field-label">Blocos de horário</label>
+            <div class="blocos-chips" id="rfBlocos"></div>
+          </div>
+
+          <div style="display: flex; gap: 8px; margin-top: 4px">
+            <button class="btn btn-primary" style="flex: 1" onclick="salvarRegra()">Salvar</button>
+            <button class="btn" onclick="closeRegraModal()" style="flex: 1">Cancelar</button>
+          </div>
+          <button class="btn btn-danger" id="regraDeleteBtn" onclick="excluirRegra()" style="width: 100%">Excluir regra</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TIPO FORM MODAL -->
+    <div class="modal-overlay" id="tipoModal" onclick="closeTipoModal(event)">
+      <div class="modal-sheet" style="padding: 0 0 16px">
+        <div class="modal-handle"></div>
+        <div class="modal-title">Editar tipo</div>
+        <div style="padding: 0 16px; display: flex; flex-direction: column; gap: 10px;">
+          <div style="display: flex; gap: 8px">
+            <button class="ifield-icon-btn" id="tpIconBtn" onclick="openIconModal(-1,'tipoIcon')" title="Escolher ícone" style="flex-shrink: 0">📌</button>
+            <input class="ifield" id="tpNome" type="text" placeholder="Nome do tipo" style="flex: 1" />
+          </div>
+          <div>
+            <label class="field-label">Peso padrão: <span id="tpPesoVal">4</span></label>
+            <input type="range" class="pts-slider" id="tpPeso" min="1" max="10" value="4" style="width:100%" />
+          </div>
+          <div>
+            <label class="field-label">Blocos padrão</label>
+            <div class="blocos-chips" id="tpBlocos"></div>
+          </div>
+          <div style="display: flex; gap: 8px; margin-top: 4px">
+            <button class="btn btn-primary" style="flex: 1" onclick="salvarTipo()">Salvar</button>
+            <button class="btn" onclick="closeTipoModal()" style="flex: 1">Cancelar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TRIAGEM MODAL -->
+    <div class="modal-overlay" id="triagemModal" onclick="closeTriagemModal(event)">
+      <div class="modal-sheet" style="padding: 0 0 16px; max-height: 85vh;">
+        <div class="modal-handle"></div>
+        <div class="modal-title" id="triagemTitulo">Triagem</div>
+        <div style="padding: 0 16px; display: flex; flex-direction: column; gap: 14px; overflow-y: auto;">
+          <div id="triagemBody"></div>
+          <div class="triagem-resumo" id="triagemResumo"></div>
+          <div style="display: flex; gap: 8px; margin-top: 4px">
+            <button class="btn btn-primary" style="flex: 1" id="triagemResponderBtn">Responder</button>
+            <button class="btn btn-primary" style="flex: 1; display:none;" id="triagemContinuarBtn">Continuar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VAGA FORM MODAL -->
+    <div class="modal-overlay" id="vagaModal" onclick="closeVagaModal(event)">
+      <div class="modal-sheet" style="padding: 0 0 16px; max-height: 85vh;">
+        <div class="modal-handle"></div>
+        <div class="modal-title" id="vagaModalTitle">Nova vaga</div>
+        <div style="padding: 0 16px; display: flex; flex-direction: column; gap: 10px; overflow-y: auto;">
+          <input class="ifield" id="vfCargo" type="text" placeholder="Cargo" style="width: 100%" />
+          <input class="ifield" id="vfEmpresa" type="text" placeholder="Empresa" style="width: 100%" />
+          <div style="display: flex; gap: 8px">
+            <select class="ifield" id="vfStage" style="flex: 1"></select>
+            <select class="ifield" id="vfModelo" style="flex: 1">
+              <option>Remoto</option>
+              <option>Híbrido</option>
+              <option>Presencial</option>
+            </select>
+          </div>
+          <div style="display: flex; gap: 8px">
+            <input class="ifield" id="vfOrigem" type="text" placeholder="Origem (ex: LinkedIn)" style="flex: 1" />
+            <input class="ifield" id="vfFaixa" type="text" placeholder="Faixa salarial" style="flex: 1" />
+          </div>
+          <input class="ifield" id="vfLink" type="url" placeholder="Link da vaga" style="width: 100%" />
+          <div style="display: flex; gap: 8px">
+            <input class="ifield" id="vfContato" type="text" placeholder="Contato / recrutador" style="flex: 1" />
+            <input class="ifield" id="vfCanal" type="text" placeholder="Canal (ex: e-mail)" style="flex: 1" />
+          </div>
+          <input class="ifield" id="vfStack" type="text" placeholder="Stack (separado por vírgula)" style="width: 100%" />
+          <textarea class="ifield" id="vfNotas" placeholder="Notas" rows="2" style="width: 100%; resize: none; font-family: var(--sans)"></textarea>
+          <div style="display: flex; gap: 8px">
+            <input class="ifield" id="vfPasso" type="text" placeholder="Próximo passo" style="flex: 1" />
+            <input class="ifield" id="vfPassoData" type="date" style="width: 150px" />
+          </div>
+
+          <div id="vagaTimelineWrap" style="display: none">
+            <label class="field-label">Linha do tempo</label>
+            <div id="vagaTimeline" class="regras-list"></div>
+            <div style="display: flex; gap: 8px; margin-top: 6px">
+              <input class="ifield" id="vfNovoEventoTxt" type="text" placeholder="Registrar evento..." style="flex: 1" />
+              <button class="btn btn-sq" id="vfAddEventoBtn">+</button>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 8px; margin-top: 4px">
+            <button class="btn btn-primary" style="flex: 1" id="vagaSalvarBtn">Salvar</button>
+            <button class="btn" onclick="closeVagaModal()" style="flex: 1">Cancelar</button>
+          </div>
+          <button class="btn btn-danger" id="vagaExcluirBtn" style="width: 100%; display: none;">Excluir vaga</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- VAGA VIEW MODAL (leitura) -->
+    <div class="modal-overlay" id="vagaViewModal" onclick="closeVagaViewModal(event)">
+      <div class="modal-sheet" style="padding: 0 0 16px; max-height: 85vh;">
+        <div class="modal-handle"></div>
+        <div style="padding: 0 16px; display: flex; flex-direction: column; gap: 12px; overflow-y: auto;">
+          <div id="vagaViewBody"></div>
+          <div style="display: flex; gap: 8px; margin-top: 4px">
+            <button class="btn btn-primary" style="flex: 1" id="vagaViewEditarBtn">✏ Editar</button>
+            <button class="btn" style="flex: 1" onclick="closeVagaViewModal()">Fechar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOOK FORM MODAL -->
+    <div class="modal-overlay" id="bookModal" onclick="closeBookModal(event)">
+      <div class="modal-sheet" style="padding: 0 0 16px">
+        <div class="modal-handle"></div>
+        <div class="modal-title" id="bookModalTitle">Adicionar livro</div>
+        <div
+          style="
+            padding: 0 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+          "
+        >
+          <input
+            class="ifield"
+            id="bfTitle"
+            type="text"
+            placeholder="Título"
+            style="width: 100%"
+          />
+          <input
+            class="ifield"
+            id="bfAuthor"
+            type="text"
+            placeholder="Autor"
+            style="width: 100%"
+          />
+          <div style="display: flex; gap: 8px">
+            <select class="ifield" id="bfStatus" style="flex: 1">
+              <option value="quero">📚 Quero ler</option>
+              <option value="lendo">📖 Lendo</option>
+              <option value="concluido">✅ Concluído</option>
+              <option value="pausado">⏸ Pausado</option>
+            </select>
+            <select class="ifield" id="bfRating" style="width: 110px">
+              <option value="0">Sem nota</option>
+              <option value="1">★ 1</option>
+              <option value="2">★★ 2</option>
+              <option value="3">★★★ 3</option>
+              <option value="4">★★★★ 4</option>
+              <option value="5">★★★★★ 5</option>
+            </select>
+          </div>
+          <textarea
+            class="ifield"
+            id="bfNotes"
+            placeholder="Notas (opcional)"
+            rows="2"
+            style="width: 100%; resize: none; font-family: var(--sans)"
+          ></textarea>
+          <div style="display: flex; gap: 8px; margin-top: 4px">
+            <button
+              class="btn btn-primary"
+              style="flex: 1"
+              onclick="saveBook()"
+            >
+              Salvar
+            </button>
+            <button class="btn" onclick="closeBookModal()" style="flex: 1">
+              Cancelar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="js/helpers.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/roadmap.js"></script>
+    <script src="js/occurrences.js"></script>
+    <script src="js/journal.js"></script>
+    <script src="js/modals.js"></script>
+    <script src="js/tracker.js"></script>
+    <script src="js/historico.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/books.js"></script>
+    <script src="js/vagas.js"></script>
+    <script src="js/estudos.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>
